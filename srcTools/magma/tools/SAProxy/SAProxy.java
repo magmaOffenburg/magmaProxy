@@ -26,12 +26,15 @@ import java.util.ArrayList;
 
 import magma.tools.SAProxy.impl.AgentProxy;
 import magma.tools.SAProxy.impl.SimsparkAgentProxyServer;
+import magma.tools.SAProxy.impl.SimsparkAgentProxyServer.SimsparkAgentProxyServerParameter;
 
 /**
  * @author Stefan Glaser
  */
 public class SAProxy
 {
+	private SimsparkAgentProxyServer proxy;
+
 	/**
 	 * Instantiates and starts the Simspark agent proxy.
 	 * 
@@ -49,9 +52,26 @@ public class SAProxy
 	 *        <td>--serverport=</td>
 	 *        <td>Simspark server Port</td>
 	 *        </tr>
+	 *        <tr>
+	 *        <td>--verbose</td>
+	 *        <td>Shows the messages</td>
+	 *        </tr>
 	 *        </table>
 	 */
 	public static void main(String[] args)
+	{
+		SimsparkAgentProxyServerParameter parameterObject = parseParameters(args);
+		SimsparkAgentProxyServer proxy = new SimsparkAgentProxyServer(
+				parameterObject);
+		SAProxy saproxy = new SAProxy(proxy);
+		saproxy.mainLoop();
+	}
+
+	/**
+	 * @param args
+	 * @return
+	 */
+	public static SimsparkAgentProxyServerParameter parseParameters(String[] args)
 	{
 		int proxyPort = 3110;
 		String ssHost = "127.0.0.1";
@@ -77,14 +97,21 @@ public class SAProxy
 			}
 		}
 
-		mainLoop(proxyPort, ssHost, ssPort, showMessages);
+		SimsparkAgentProxyServerParameter parameterObject = new SimsparkAgentProxyServerParameter(
+				proxyPort, ssHost, ssPort, showMessages);
+		return parameterObject;
 	}
 
-	private static void mainLoop(int proxyPort, String ssHost, int ssPort,
-			boolean showMessages)
+	/**
+	 * @param proxy
+	 */
+	public SAProxy(SimsparkAgentProxyServer proxy)
 	{
-		SimsparkAgentProxyServer proxy = new SimsparkAgentProxyServer(proxyPort,
-				ssHost, ssPort, showMessages);
+		this.proxy = proxy;
+	}
+
+	public void mainLoop()
+	{
 
 		System.out.println("Starting proxy...");
 		proxy.start();

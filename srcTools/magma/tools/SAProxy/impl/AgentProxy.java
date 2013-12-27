@@ -68,8 +68,6 @@ public class AgentProxy
 	/** true if we have received a syn message from this agent in this cycle */
 	private boolean haveSynMessage;
 
-	private Object messageDisplay;
-
 	public AgentProxy(Socket clientSocket, String ssHost, int ssPort,
 			boolean showMessages)
 	{
@@ -224,13 +222,15 @@ public class AgentProxy
 					// shutdown when receiving null-message
 					shutdown = true;
 				} else {
-					receivedMessages.newMessage(perception.length(),
-							receivedMessages.lastMessageTime);
+					if (onNewServerMessage(perception)) {
+						receivedMessages.newMessage(perception.length(),
+								receivedMessages.lastMessageTime);
 
-					// forward perception message to client agent
-					sentMessagesWhenReceiving = sentMessages.count;
-					haveSynMessage = false;
-					sendClientMsg(perception);
+						// forward perception message to client agent
+						sentMessagesWhenReceiving = sentMessages.count;
+						haveSynMessage = false;
+						sendClientMsg(perception);
+					}
 
 					// If there is already another message in the input channel, skip
 					// waiting time and sending of sync-message, until we run
@@ -284,15 +284,19 @@ public class AgentProxy
 
 					if (action.length() > 0) {
 						// forward action message to Simspark server
-						sendServerMsg(action);
-						sentMessages.newMessage(action.length(),
-								receivedMessages.lastMessageTime);
+						if (onNewClientMessage(action)) {
 
-						if (serverForwarder == null) {
-							// with lazy connect we have to wait to listen for server
-							// messages until here
-							serverForwarder = new ServerPerceptionsForwarder();
-							serverForwarder.start();
+							sendServerMsg(action);
+							sentMessages.newMessage(action.length(),
+									receivedMessages.lastMessageTime);
+
+							if (serverForwarder == null) {
+								// with lazy connect we have to wait to listen for
+								// server
+								// messages until here
+								serverForwarder = new ServerPerceptionsForwarder();
+								serverForwarder.start();
+							}
 						}
 					}
 				}
@@ -377,5 +381,25 @@ public class AgentProxy
 	public void switchServerMessageDisplay()
 	{
 		serverConnection.switchMessageDisplay();
+	}
+
+	/**
+	 * Called before a message from the server was forwarded to the client
+	 * @param message the message received from the server
+	 * @return true if the message should be forwarded to the client
+	 */
+	protected boolean onNewServerMessage(String message)
+	{
+		return true;
+	}
+
+	/**
+	 * Called before a client message has been forwarded to the server
+	 * @param message the message received fromt the client
+	 * @return true if the message should be forwarded to the server
+	 */
+	public boolean onNewClientMessage(String message)
+	{
+		return true;
 	}
 }

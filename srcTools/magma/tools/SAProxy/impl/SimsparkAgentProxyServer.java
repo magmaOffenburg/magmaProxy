@@ -43,24 +43,24 @@ public class SimsparkAgentProxyServer extends Thread
 	private int proxyPort;
 
 	/** Simspark server IP */
-	private String ssHost;
+	protected String ssHost;
 
 	/** Simspark server port */
-	private int ssPort;
+	protected int ssPort;
 
 	/** List of agent proxies */
-	private ArrayList<AgentProxy> agentProxies;
+	protected ArrayList<AgentProxy> agentProxies;
 
 	/** true if messages should be printed from start */
-	private boolean showMessages;
+	protected boolean showMessages;
 
-	public SimsparkAgentProxyServer(int proxyPort, String ssHost, int ssPort,
-			boolean showMessages)
+	public SimsparkAgentProxyServer(
+			SimsparkAgentProxyServerParameter parameterObject)
 	{
-		this.proxyPort = proxyPort;
-		this.ssHost = ssHost;
-		this.ssPort = ssPort;
-		this.showMessages = showMessages;
+		this.proxyPort = parameterObject.getProxyPort();
+		this.ssHost = parameterObject.getSsHost();
+		this.ssPort = parameterObject.getSsPort();
+		this.showMessages = parameterObject.isShowMessages();
 
 		agentProxies = new ArrayList<AgentProxy>();
 	}
@@ -85,9 +85,10 @@ public class SimsparkAgentProxyServer extends Thread
 				}
 
 				// create new agent proxy
-				AgentProxy agentProxy = new AgentProxy(clientSocket, ssHost,
-						ssPort, showMessages);
-				agentProxies.add(agentProxy);
+				AgentProxy agentProxy = createAgentProxy(clientSocket);
+				if (agentProxy != null) {
+					agentProxies.add(agentProxy);
+				}
 			}
 		} catch (IOException e) {
 			System.out.println("Proxy server socket closed!");
@@ -100,6 +101,16 @@ public class SimsparkAgentProxyServer extends Thread
 			proxy.stopProxy();
 		}
 		agentProxies.clear();
+	}
+
+	/**
+	 * Factory method to create agent proxy
+	 * @param clientSocket the socket the agent proxy works on
+	 * @return a new instance of agent proxy
+	 */
+	protected AgentProxy createAgentProxy(Socket clientSocket)
+	{
+		return new AgentProxy(clientSocket, ssHost, ssPort, showMessages);
 	}
 
 	/**
@@ -124,5 +135,64 @@ public class SimsparkAgentProxyServer extends Thread
 	public ArrayList<AgentProxy> getAgentProxies()
 	{
 		return agentProxies;
+	}
+
+	public static class SimsparkAgentProxyServerParameter
+	{
+		/**  */
+		private int proxyPort;
+
+		/**  */
+		private String ssHost;
+
+		/**  */
+		private int ssPort;
+
+		/**  */
+		private boolean showMessages;
+
+		/**
+		 * 
+		 */
+		public SimsparkAgentProxyServerParameter(int proxyPort, String ssHost,
+				int ssPort, boolean showMessages)
+		{
+			this.proxyPort = proxyPort;
+			this.ssHost = ssHost;
+			this.ssPort = ssPort;
+			this.showMessages = showMessages;
+		}
+
+		/**
+		 * @return the proxyPort
+		 */
+		public int getProxyPort()
+		{
+			return proxyPort;
+		}
+
+		/**
+		 * @return the ssHost
+		 */
+		public String getSsHost()
+		{
+			return ssHost;
+		}
+
+		/**
+		 * @return the ssPort
+		 */
+		public int getSsPort()
+		{
+			return ssPort;
+		}
+
+		/**
+		 * @return the showMessages
+		 */
+		public boolean isShowMessages()
+		{
+			return showMessages;
+		}
 	}
 }
