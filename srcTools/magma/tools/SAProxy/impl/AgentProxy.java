@@ -68,9 +68,13 @@ public class AgentProxy
 	/** true if we have received a syn message from this agent in this cycle */
 	private boolean haveSynMessage;
 
+	/** if true prints out sent and received messages */
+	protected boolean showMessages;
+
 	public AgentProxy(Socket clientSocket, String ssHost, int ssPort,
 			boolean showMessages)
 	{
+		this.showMessages = showMessages;
 		System.out.print("Starting agent proxy for " + clientSocket + "... ");
 		sentMessages = new MessageInfo(false);
 		receivedMessages = new MessageInfo(true);
