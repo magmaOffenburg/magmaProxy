@@ -131,7 +131,7 @@ public class Connection
 	 * @throws IOException
 	 * @throws SocketException
 	 */
-	public void sendMessage(String msg)
+	public void sendMessage(byte[] msg)
 	{
 		try {
 			if (!connected && lazyConnect) {
@@ -146,7 +146,7 @@ public class Connection
 			}
 
 			// do not send empty messages
-			if (msg.length() == 0) {
+			if (msg.length == 0) {
 				if (messageDisplay) {
 					System.out.println("<empty message>");
 				}
@@ -154,11 +154,11 @@ public class Connection
 			}
 
 			if (messageDisplay) {
-				System.out.println(msg.substring(0, Math.min(40, msg.length())));
+				System.out.println(new String(msg).substring(0,
+						Math.min(40, msg.length)));
 			}
 
-			byte[] body = msg.getBytes();
-			int len = body.length;
+			int len = msg.length;
 			byte[] byteMsg = new byte[len + 4];
 
 			// creation of the messages header (4 bytes)
@@ -166,7 +166,7 @@ public class Connection
 			byteMsg[1] = (byte) ((len >> 16) & 0xFF);
 			byteMsg[2] = (byte) ((len >> 8) & 0xFF);
 			byteMsg[3] = (byte) (len & 0xFF);
-			System.arraycopy(body, 0, byteMsg, 4, len);
+			System.arraycopy(msg, 0, byteMsg, 4, len);
 
 			out.write(byteMsg);
 			out.flush();
@@ -182,13 +182,12 @@ public class Connection
 	 * @return the next, complete received message, or null if the connection was
 	 *         closed
 	 */
-	public String receiveMessage()
+	public byte[] receiveMessage()
 	{
 		if (!connected) {
 			return null;
 		}
 
-		String msg;
 		byte[] result;
 		int length;
 
@@ -213,15 +212,13 @@ public class Connection
 				total += in.read(result, total, length - total);
 			}
 
-			msg = new String(result, 0, length, "UTF-8");
-
 		} catch (IOException e) {
 			System.out.println("Exception when receiving message on socket: "
 					+ socket.toString() + " Message: " + e);
 			disconnect();
 			return null;
 		}
-		return msg;
+		return result;
 	}
 
 	public boolean inputAvailable()

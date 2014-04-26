@@ -33,7 +33,7 @@ import java.net.UnknownHostException;
 public class AgentProxy
 {
 	/** The sync-message string */
-	public static final String SYNC_MESSAGE = "(syn)";
+	public static byte[] SYNC_BYTES = "(syn)".getBytes();
 
 	/**
 	 * The maximum time between receiving a perception and responding a
@@ -141,12 +141,11 @@ public class AgentProxy
 	 * 
 	 * @param msg - the message to send
 	 */
-	private synchronized void sendServerMsg(String msg)
+	private synchronized void sendServerMsg(byte[] msg)
 	{
 		serverConnection.sendMessage(msg);
 		// check if a cycle was missed by the agent
-		if (sentMessages.count == sentMessagesWhenReceiving
-				&& msg == SYNC_MESSAGE) {
+		if (sentMessages.count == sentMessagesWhenReceiving && msg == SYNC_BYTES) {
 			missedCycles++;
 		}
 	}
@@ -156,7 +155,7 @@ public class AgentProxy
 	 * 
 	 * @param msg - the message to send
 	 */
-	private void sendClientMsg(String msg)
+	private void sendClientMsg(byte[] msg)
 	{
 		clientConnection.sendMessage(msg);
 	}
@@ -166,7 +165,7 @@ public class AgentProxy
 	 * 
 	 * @return the next, complete message received from the Simspark server
 	 */
-	private String receiveServerMsg()
+	private byte[] receiveServerMsg()
 	{
 		return serverConnection.receiveMessage();
 	}
@@ -176,7 +175,7 @@ public class AgentProxy
 	 * 
 	 * @return the next, complete message received from the client agent
 	 */
-	private String receiveClientMsg()
+	private byte[] receiveClientMsg()
 	{
 		return clientConnection.receiveMessage();
 	}
@@ -217,17 +216,17 @@ public class AgentProxy
 
 			// some clients where hanging, when sending the scene
 			// string and not getting a server message
-			sendServerMsg(SYNC_MESSAGE);
+			sendServerMsg(SYNC_BYTES);
 
 			while (!shutdown) {
-				String perception = receiveServerMsg();
+				byte[] perception = receiveServerMsg();
 
 				if (perception == null) {
 					// shutdown when receiving null-message
 					shutdown = true;
 				} else {
 					if (onNewServerMessage(perception)) {
-						receivedMessages.newMessage(perception.length(),
+						receivedMessages.newMessage(perception.length,
 								receivedMessages.lastMessageTime);
 
 						// forward perception message to client agent
@@ -252,7 +251,7 @@ public class AgentProxy
 
 						// send sync message to Simspark server
 						if (!haveSynMessage) {
-							sendServerMsg(SYNC_MESSAGE);
+							sendServerMsg(SYNC_BYTES);
 						}
 					}
 				}
@@ -276,22 +275,22 @@ public class AgentProxy
 
 			while (!shutdown) {
 				// receive next client action message
-				String action = receiveClientMsg();
+				byte[] action = receiveClientMsg();
 
 				if (action == null) {
 					// shutdown when receiving null-message
 					shutdown = true;
 				} else {
-					if (action.indexOf(SYNC_MESSAGE) >= 0) {
+					if (findBytes(action, SYNC_BYTES)) {
 						haveSynMessage = true;
 					}
 
-					if (action.length() > 0) {
+					if (action.length > 0) {
 						// forward action message to Simspark server
 						if (onNewClientMessage(action)) {
 
 							sendServerMsg(action);
-							sentMessages.newMessage(action.length(),
+							sentMessages.newMessage(action.length,
 									receivedMessages.lastMessageTime);
 
 							if (serverForwarder == null) {
@@ -307,6 +306,22 @@ public class AgentProxy
 			}
 
 			stopProxy();
+		}
+
+		boolean findBytes(byte[] arrayToSearch, byte[] bytesToFind)
+		{
+			for (int i = 0; i <= arrayToSearch.length - bytesToFind.length; i++) {
+				int j = 0;
+				for (; j < bytesToFind.length; j++) {
+					if (arrayToSearch[i + j] != bytesToFind[j]) {
+						break;
+					}
+				}
+				if (j == bytesToFind.length) {
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 
@@ -392,7 +407,7 @@ public class AgentProxy
 	 * @param message the message received from the server
 	 * @return true if the message should be forwarded to the client
 	 */
-	protected boolean onNewServerMessage(String message)
+	protected boolean onNewServerMessage(byte[] message)
 	{
 		return true;
 	}
@@ -402,7 +417,7 @@ public class AgentProxy
 	 * @param message the message received fromt the client
 	 * @return true if the message should be forwarded to the server
 	 */
-	public boolean onNewClientMessage(String message)
+	public boolean onNewClientMessage(byte[] message)
 	{
 		return true;
 	}
