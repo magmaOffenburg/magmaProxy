@@ -113,7 +113,7 @@ public class SAProxy
 	public void mainLoop()
 	{
 
-		System.out.println("Starting proxy...");
+		System.out.println("Starting proxy version 2.0 ...");
 		proxy.start();
 
 		// open up standard input
