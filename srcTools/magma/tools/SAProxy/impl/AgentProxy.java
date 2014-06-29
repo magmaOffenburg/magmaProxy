@@ -225,7 +225,8 @@ public class AgentProxy
 					// shutdown when receiving null-message
 					shutdown = true;
 				} else {
-					if (onNewServerMessage(perception)) {
+					perception = onNewServerMessage(perception);
+					if (perception != null) {
 						receivedMessages.newMessage(perception.length,
 								receivedMessages.lastMessageTime);
 
@@ -287,7 +288,8 @@ public class AgentProxy
 
 					if (action.length > 0) {
 						// forward action message to Simspark server
-						if (onNewClientMessage(action)) {
+						action = onNewClientMessage(action);
+						if (action != null) {
 
 							sendServerMsg(action);
 							sentMessages.newMessage(action.length,
@@ -405,20 +407,22 @@ public class AgentProxy
 	/**
 	 * Called before a message from the server was forwarded to the client
 	 * @param message the message received from the server
-	 * @return true if the message should be forwarded to the client
+	 * @return the message that should be forwarded to the client, null if no
+	 *         forward
 	 */
-	protected boolean onNewServerMessage(byte[] message)
+	protected byte[] onNewServerMessage(byte[] message)
 	{
-		return true;
+		return message;
 	}
 
 	/**
 	 * Called before a client message has been forwarded to the server
 	 * @param message the message received fromt the client
-	 * @return true if the message should be forwarded to the server
+	 * @return the message that should be forwarded to the server, null if no
+	 *         forward
 	 */
-	public boolean onNewClientMessage(byte[] message)
+	public byte[] onNewClientMessage(byte[] message)
 	{
-		return true;
+		return message;
 	}
 }
