@@ -78,7 +78,8 @@ public class SAProxy
 		int ssPort = 3100;
 		boolean showMessages = false;
 
-		for (String arg : args) {
+		for (int i = 0; i < args.length; i++) {
+			String arg = args[i];
 			if (arg.startsWith("--proxyport=")) {
 				proxyPort = Integer.valueOf(arg.replaceFirst("--proxyport=", ""));
 			} else if (arg.startsWith("--server=")) {
@@ -177,15 +178,15 @@ public class SAProxy
 				// switch messages on/off
 				ArrayList<AgentProxy> agentProxies = proxy.getAgentProxies();
 				System.out.println("Proxy thread alive: " + proxy.isAlive());
-				for (AgentProxy agentProxy : agentProxies) {
-					agentProxy.switchClientMessageDisplay();
+				for (int i = 0; i < agentProxies.size(); i++) {
+					agentProxies.get(i).switchClientMessageDisplay();
 				}
 			} else if ("n".equals(input)) {
 				// switch messages on/off
 				ArrayList<AgentProxy> agentProxies = proxy.getAgentProxies();
 				System.out.println("Proxy thread alive: " + proxy.isAlive());
-				for (AgentProxy agentProxy : agentProxies) {
-					agentProxy.switchServerMessageDisplay();
+				for (int i = 0; i < agentProxies.size(); i++) {
+					agentProxies.get(i).switchServerMessageDisplay();
 				}
 			} else {
 				System.out.println("Command \"" + input + "\" unknown!");
