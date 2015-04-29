@@ -128,8 +128,6 @@ public class Connection
 	 * Send a message using the given stream
 	 * 
 	 * @param msg Message in ASCII form
-	 * @throws IOException
-	 * @throws SocketException
 	 */
 	public void sendMessage(byte[] msg)
 	{
@@ -236,9 +234,6 @@ public class Connection
 		return socket.toString();
 	}
 
-	/**
-	 * 
-	 */
 	public void switchMessageDisplay()
 	{
 		messageDisplay = !messageDisplay;

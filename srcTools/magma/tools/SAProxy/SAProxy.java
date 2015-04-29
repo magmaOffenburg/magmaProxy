@@ -67,10 +67,6 @@ public class SAProxy
 		saproxy.mainLoop();
 	}
 
-	/**
-	 * @param args
-	 * @return
-	 */
 	public static SimsparkAgentProxyServerParameter parseParameters(String[] args)
 	{
 		int proxyPort = 3110;
@@ -97,14 +93,10 @@ public class SAProxy
 			}
 		}
 
-		SimsparkAgentProxyServerParameter parameterObject = new SimsparkAgentProxyServerParameter(
-				proxyPort, ssHost, ssPort, showMessages);
-		return parameterObject;
+		return new SimsparkAgentProxyServerParameter(proxyPort, ssHost, ssPort,
+				showMessages);
 	}
 
-	/**
-	 * @param proxy
-	 */
 	public SAProxy(SimsparkAgentProxyServer proxy)
 	{
 		this.proxy = proxy;

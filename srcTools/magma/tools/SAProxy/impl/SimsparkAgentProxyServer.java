@@ -139,16 +139,12 @@ public class SimsparkAgentProxyServer extends Thread
 
 	public static class SimsparkAgentProxyServerParameter
 	{
-		/**  */
 		private int proxyPort;
 
-		/**  */
 		private String ssHost;
 
-		/**  */
 		private int ssPort;
 
-		/**  */
 		private boolean showMessages;
 
 		/**
