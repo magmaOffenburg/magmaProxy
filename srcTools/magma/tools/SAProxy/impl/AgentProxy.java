@@ -365,22 +365,29 @@ public class AgentProxy
 					} else {
 						for (int i = initSay + 5; i < endSay; i++) {
 							int ascii = msg.charAt(i);
+							// check for invalid character range
+							// the \" is not checked since it is not explicitly
+							// forbidden in the manual
 							if (ascii > 126 || ascii < 32 || ascii == 40
-									|| ascii == 41 || ascii == 32 || ascii == 34) {
+									|| ascii == 41 /* || ascii == 32 */|| ascii == 34) {
 								wrongMsgComposition = true;
 							}
 						}
 					}
 					if (wrongMsgComposition) {
-						System.out.println("Invalid say: " + msg);
-						StringBuffer s = new StringBuffer(msg);
-						s.delete(initSay, endSay + 1);
-						s.insert(0, "(syn)");
-						msg = s.toString();
+						// System.out.println("Invalid say: " + msg);
+						// switched off changing message
+						// StringBuffer s = new StringBuffer(msg);
+						// s.delete(initSay, endSay + 1);
+						// s.insert(0, "(syn)");
+						// msg = s.toString();
 						invalidSayMessageCount++;
 					}
 				}
-				return msg.getBytes();
+				// switched off to change the message, but we want to count invalid
+				// messages
+				// return msg.getBytes();
+				return action;
 
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();

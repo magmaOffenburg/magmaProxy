@@ -28,7 +28,7 @@ if [ $# -ne 3 ]; then
         exit 1
 fi
 
-java -jar ./magmaProxy.jar --server=$1 --serverport=$2 --proxyport=$3  
+java -jar ./jar/magmaProxy.jar --server=$1 --serverport=$2 --proxyport=$3  
 
 #CLSPTH=./magmaProxy.jar
 #java -cp $CLSPTH magma.tools.SAProxy.SAProxy --server=$1 --serverport=$2 --proxyport=$3  
