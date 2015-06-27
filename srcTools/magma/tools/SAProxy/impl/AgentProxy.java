@@ -296,6 +296,9 @@ public class AgentProxy
 				} else {
 					if (findBytes(action, SYNC_BYTES)) {
 						haveSynMessage = true;
+						// prefix (syn) to avoid server from hanging in case of bad
+						// say messages
+						action = prependSyn(action);
 					}
 
 					if (action.length > 0) {
@@ -303,13 +306,7 @@ public class AgentProxy
 						action = onNewClientMessage(action);
 						if (action != null) {
 
-							try {
-								String msg = new String(action, "UTF-8");
-								msg = checkSay(msg);
-								action = msg.getBytes();
-							} catch (UnsupportedEncodingException e) {
-								e.printStackTrace();
-							}
+							// action = checkSay(action)
 							sendServerMsg(action);
 							sentMessages.newMessage(action.length,
 									receivedMessages.lastMessageTime);
@@ -329,44 +326,66 @@ public class AgentProxy
 			stopProxy();
 		}
 
-		public String checkSay(String msg)
+		/**
+		 * Prefixes the action string with a (syn) to avoid problems of hanging
+		 * server in case of bad formed say messages.
+		 * @param action the action string
+		 * @return the action string prefixed with (syn)
+		 */
+		private byte[] prependSyn(byte[] action)
+		{
+			byte[] result = new byte[SYNC_BYTES.length + action.length];
+			System.arraycopy(SYNC_BYTES, 0, result, 0, SYNC_BYTES.length);
+			System.arraycopy(action, 0, result, SYNC_BYTES.length, action.length);
+			return result;
+		}
+
+		@SuppressWarnings("unused")
+		protected byte[] checkSay(byte[] action)
 		{
 			boolean wrongMsgComposition = false;
+			try {
+				String msg = new String(action, "UTF-8");
 
-			int initSay = msg.indexOf("(say");
-			int endSay;
+				int initSay = msg.indexOf("(say");
+				int endSay;
 
-			if (initSay != -1) {
-				char nextCharAfterSay;
-				endSay = msg.indexOf(")", initSay);
-				if (endSay == msg.length()) {
-					nextCharAfterSay = msg.charAt(endSay - 1);
-				} else {
-					nextCharAfterSay = msg.charAt(endSay + 1);
-				}
+				if (initSay != -1) {
+					char nextCharAfterSay;
+					endSay = msg.indexOf(")", initSay);
+					if (endSay == msg.length()) {
+						nextCharAfterSay = msg.charAt(endSay - 1);
+					} else {
+						nextCharAfterSay = msg.charAt(endSay + 1);
+					}
 
-				if (nextCharAfterSay != '(' && nextCharAfterSay != '\0') {
-					endSay = msg.indexOf(")", endSay + 1);
-					wrongMsgComposition = true;
-				} else {
-					for (int i = initSay + 5; i < endSay; i++) {
-						int ascii = msg.charAt(i);
-						if (ascii > 126 || ascii < 32 || ascii == 40 || ascii == 41
-								|| ascii == 32 || ascii == 34) {
-							wrongMsgComposition = true;
+					if (nextCharAfterSay != '(' && nextCharAfterSay != '\0') {
+						endSay = msg.indexOf(")", endSay + 1);
+						wrongMsgComposition = true;
+					} else {
+						for (int i = initSay + 5; i < endSay; i++) {
+							int ascii = msg.charAt(i);
+							if (ascii > 126 || ascii < 32 || ascii == 40
+									|| ascii == 41 || ascii == 32 || ascii == 34) {
+								wrongMsgComposition = true;
+							}
 						}
 					}
+					if (wrongMsgComposition) {
+						System.out.println("Invalid say: " + msg);
+						StringBuffer s = new StringBuffer(msg);
+						s.delete(initSay, endSay + 1);
+						s.insert(0, "(syn)");
+						msg = s.toString();
+						invalidSayMessageCount++;
+					}
 				}
-				if (wrongMsgComposition) {
-					System.out.println("Invalid say: " + msg);
-					StringBuffer s = new StringBuffer(msg);
-					s.delete(initSay, endSay + 1);
-					s.insert(0, "(syn)");
-					msg = s.toString();
-					invalidSayMessageCount++;
-				}
+				return msg.getBytes();
+
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
 			}
-			return msg;
+			return action;
 		}
 
 		boolean findBytes(byte[] arrayToSearch, byte[] bytesToFind)
