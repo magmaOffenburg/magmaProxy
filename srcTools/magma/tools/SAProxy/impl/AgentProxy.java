@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2008, 2013 Hochschule Offenburg
+ * Copyright 2008, 2015 Hochschule Offenburg
  * Klaus Dorer, Stefan Glaser
  *
  * This file is part of magma Simspark Agent Proxy.
