@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A simple connection class, wrapping the communication from and to one socket.
@@ -34,6 +35,8 @@ import java.net.UnknownHostException;
  */
 public class Connection
 {
+	public static final int TIME_OUT_WAITING = 1000;
+
 	/** Network socket */
 	private Socket socket;
 
@@ -128,6 +131,8 @@ public class Connection
 	 * Send a message using the given stream
 	 * 
 	 * @param msg Message in ASCII form
+	 * @throws IOException
+	 * @throws SocketException
 	 */
 	public void sendMessage(byte[] msg)
 	{
@@ -190,6 +195,7 @@ public class Connection
 		int length;
 
 		try {
+			waitMessage();
 			int byte0 = in.read();
 
 			int byte1 = in.read();
@@ -217,6 +223,28 @@ public class Connection
 			return null;
 		}
 		return result;
+	}
+
+	public void waitMessage() throws IOException
+	{
+		int cronometro = 0;
+		while (true) {
+			int hasMsg = in.available();
+			if (hasMsg > 0 || cronometro > TIME_OUT_WAITING) {
+				break;
+			}
+			try {
+				TimeUnit.MILLISECONDS.sleep(10);// sleeps for 10 milliseconds
+
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			cronometro++;
+		}
+		if (cronometro > TIME_OUT_WAITING) {
+			// System.out.println("passou do cronometro" );
+			throw new IOException("Timeout waiting for client!");
+		}
 	}
 
 	public boolean inputAvailable()

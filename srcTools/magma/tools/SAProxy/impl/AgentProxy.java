@@ -20,6 +20,7 @@
 package magma.tools.SAProxy.impl;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -29,6 +30,11 @@ import java.net.UnknownHostException;
  * forwarding server messages and maintaining sync time.
  * 
  * @author Stefan Glaser, Klaus Dorer
+ */
+/**
+ * introduced the checking of say messages. This one version doesn't let chars
+ * out of the wiki specified range pass through the server. Quotation marks are
+ * being censored too.
  */
 public class AgentProxy
 {
@@ -71,6 +77,9 @@ public class AgentProxy
 	/** if true prints out sent and received messages */
 	protected boolean showMessages;
 
+	/** counts how many invalid say messages have been sent by client */
+	private int invalidSayMessageCount;
+
 	public AgentProxy(Socket clientSocket, String ssHost, int ssPort,
 			boolean showMessages)
 	{
@@ -80,6 +89,7 @@ public class AgentProxy
 		receivedMessages = new MessageInfo(true);
 		missedCycles = 0;
 		haveSynMessage = false;
+		invalidSayMessageCount = 0;
 
 		try {
 			clientConnection = new Connection(clientSocket);
@@ -121,6 +131,7 @@ public class AgentProxy
 		}
 
 		if (success) {
+			System.out.println(toString());
 			System.out.println("Closed   agent proxy for " + clientConnection);
 		}
 	}
@@ -187,6 +198,7 @@ public class AgentProxy
 		StringBuilder result = new StringBuilder(100);
 		result.append("Agent (" + connectedString + "):");
 		result.append(" missed: " + missedCycles);
+		result.append(" invalid say: " + invalidSayMessageCount);
 		result.append(" connection: " + clientConnection);
 		return result.toString();
 	}
@@ -291,6 +303,13 @@ public class AgentProxy
 						action = onNewClientMessage(action);
 						if (action != null) {
 
+							try {
+								String msg = new String(action, "UTF-8");
+								msg = checkSay(msg);
+								action = msg.getBytes();
+							} catch (UnsupportedEncodingException e) {
+								e.printStackTrace();
+							}
 							sendServerMsg(action);
 							sentMessages.newMessage(action.length,
 									receivedMessages.lastMessageTime);
@@ -308,6 +327,46 @@ public class AgentProxy
 			}
 
 			stopProxy();
+		}
+
+		public String checkSay(String msg)
+		{
+			boolean wrongMsgComposition = false;
+
+			int initSay = msg.indexOf("(say");
+			int endSay;
+
+			if (initSay != -1) {
+				char nextCharAfterSay;
+				endSay = msg.indexOf(")", initSay);
+				if (endSay == msg.length()) {
+					nextCharAfterSay = msg.charAt(endSay - 1);
+				} else {
+					nextCharAfterSay = msg.charAt(endSay + 1);
+				}
+
+				if (nextCharAfterSay != '(' && nextCharAfterSay != '\0') {
+					endSay = msg.indexOf(")", endSay + 1);
+					wrongMsgComposition = true;
+				} else {
+					for (int i = initSay + 5; i < endSay; i++) {
+						int ascii = msg.charAt(i);
+						if (ascii > 126 || ascii < 32 || ascii == 40 || ascii == 41
+								|| ascii == 32 || ascii == 34) {
+							wrongMsgComposition = true;
+						}
+					}
+				}
+				if (wrongMsgComposition) {
+					System.out.println("Invalid say: " + msg);
+					StringBuffer s = new StringBuffer(msg);
+					s.delete(initSay, endSay + 1);
+					s.insert(0, "(syn)");
+					msg = s.toString();
+					invalidSayMessageCount++;
+				}
+			}
+			return msg;
 		}
 
 		boolean findBytes(byte[] arrayToSearch, byte[] bytesToFind)

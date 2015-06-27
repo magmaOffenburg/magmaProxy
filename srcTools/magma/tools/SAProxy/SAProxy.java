@@ -93,10 +93,14 @@ public class SAProxy
 			}
 		}
 
-		return new SimsparkAgentProxyServerParameter(proxyPort, ssHost, ssPort,
-				showMessages);
+		SimsparkAgentProxyServerParameter parameterObject = new SimsparkAgentProxyServerParameter(
+				proxyPort, ssHost, ssPort, showMessages);
+		return parameterObject;
 	}
 
+	/**
+	 * @param proxy
+	 */
 	public SAProxy(SimsparkAgentProxyServer proxy)
 	{
 		this.proxy = proxy;
@@ -105,7 +109,7 @@ public class SAProxy
 	public void mainLoop()
 	{
 
-		System.out.println("Starting proxy version 2.0 ...");
+		System.out.println("Starting proxy version 2.1.2 ...");
 		proxy.start();
 
 		// open up standard input
