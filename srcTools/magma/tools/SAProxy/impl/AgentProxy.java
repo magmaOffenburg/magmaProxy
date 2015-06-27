@@ -306,7 +306,7 @@ public class AgentProxy
 						action = onNewClientMessage(action);
 						if (action != null) {
 
-							// action = checkSay(action)
+							action = checkSay(action);
 							sendServerMsg(action);
 							sentMessages.newMessage(action.length,
 									receivedMessages.lastMessageTime);
@@ -340,7 +340,6 @@ public class AgentProxy
 			return result;
 		}
 
-		@SuppressWarnings("unused")
 		protected byte[] checkSay(byte[] action)
 		{
 			boolean wrongMsgComposition = false;
