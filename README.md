@@ -98,7 +98,7 @@ after removing all "sync"-commands from the respective action messages.
 
 The SimSpark Agent Proxy has following command line parameters:
 
-- `--proxyPort=<port>` : The proxy server port for incoming connections
-- `--ssHost=<ip>` : The SimSpark server host
-- `--ssPort=<port>` : The SimSpark server port 
+- `--server=<ip>` : The SimSpark server host
+- `--serverport=<port>` : The SimSpark server port 
+- `--proxyport=<port>` : The proxy server port for incoming connections
 - `--verbose` : Prints the messages of all agents
