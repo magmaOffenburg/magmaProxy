@@ -110,7 +110,10 @@ public class SimsparkAgentProxyServer extends Thread
 	 */
 	protected AgentProxy createAgentProxy(Socket clientSocket)
 	{
-		return new AgentProxy(clientSocket, ssHost, ssPort, showMessages);
+		AgentProxy agentProxy = new AgentProxy(clientSocket, ssHost, ssPort,
+				showMessages);
+		agentProxy.start(clientSocket, ssHost, ssPort, showMessages);
+		return agentProxy;
 	}
 
 	/**

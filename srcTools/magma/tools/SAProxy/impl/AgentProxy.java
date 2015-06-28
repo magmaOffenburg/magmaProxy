@@ -84,14 +84,18 @@ public class AgentProxy
 			boolean showMessages)
 	{
 		this.showMessages = showMessages;
-		System.out.print("Starting agent proxy for " + clientSocket + "... ");
 		sentMessages = new MessageInfo(false);
 		receivedMessages = new MessageInfo(true);
 		missedCycles = 0;
 		haveSynMessage = false;
 		invalidSayMessageCount = 0;
+	}
 
+	public void start(Socket clientSocket, String ssHost, int ssPort,
+			boolean showMessages)
+	{
 		try {
+			System.out.print("Starting agent proxy for " + clientSocket + "... ");
 			clientConnection = new Connection(clientSocket);
 			serverConnection = new Connection(ssHost, ssPort);
 			if (showMessages) {
@@ -219,7 +223,7 @@ public class AgentProxy
 	 * {@link AgentProxy}.WAIT_TIME ms before it sends a sync-message to the
 	 * server.
 	 */
-	private class ServerPerceptionsForwarder extends Thread
+	class ServerPerceptionsForwarder extends Thread
 	{
 		@Override
 		public void run()
@@ -279,7 +283,7 @@ public class AgentProxy
 	 * messages from the client agent to the Simspark server. If an action
 	 * message already contains a sync-command, it is removed from the message.
 	 */
-	private class ClientActionsForwarder extends Thread
+	class ClientActionsForwarder extends Thread
 	{
 		@Override
 		public void run()
@@ -352,9 +356,8 @@ public class AgentProxy
 				if (initSay != -1) {
 					char nextCharAfterSay;
 					endSay = msg.indexOf(")", initSay);
-					if (endSay == msg.length()) {
-						nextCharAfterSay = msg.charAt(endSay - 1);
-					} else {
+					nextCharAfterSay = '(';
+					if (endSay < msg.length() - 1) {
 						nextCharAfterSay = msg.charAt(endSay + 1);
 					}
 
@@ -368,7 +371,7 @@ public class AgentProxy
 							// the \" is not checked since it is not explicitly
 							// forbidden in the manual
 							if (ascii > 126 || ascii < 32 || ascii == 40
-									|| ascii == 41 /* || ascii == 32 */|| ascii == 34) {
+									|| ascii == 41 || ascii == 32 /* || ascii == 34 */) {
 								wrongMsgComposition = true;
 							}
 						}
@@ -508,5 +511,14 @@ public class AgentProxy
 	public byte[] onNewClientMessage(byte[] message)
 	{
 		return message;
+	}
+
+	/**
+	 * Accessor for invalid say message count
+	 * @return the number of invalid say messages detected
+	 */
+	public int getInvalidSayMessageCount()
+	{
+		return invalidSayMessageCount;
 	}
 }
