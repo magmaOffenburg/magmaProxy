@@ -88,4 +88,14 @@ public class AgentProxyTest
 		forwarder.checkSay(action);
 		assertEquals(0, testee.getInvalidSayMessageCount());
 	}
+
+	@Test
+	public void testPrependSyn()
+	{
+		ClientActionsForwarder forwarder = testee.new ClientActionsForwarder();
+		String msg = "testMessage";
+		byte[] action = msg.getBytes();
+		byte[] result = forwarder.prependSyn(action);
+		assertEquals("(syn)testMessage", new String(result));
+	}
 }

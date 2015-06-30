@@ -29,10 +29,13 @@ import magma.tools.SAProxy.impl.SimsparkAgentProxyServer;
 import magma.tools.SAProxy.impl.SimsparkAgentProxyServer.SimsparkAgentProxyServerParameter;
 
 /**
+ * Proxy for RoboCup games.
  * @author Stefan Glaser
  */
 public class SAProxy
 {
+	private static final String PROXY_VERSION = "2.1.3 ";
+
 	private SimsparkAgentProxyServer proxy;
 
 	/**
@@ -109,7 +112,7 @@ public class SAProxy
 	public void mainLoop()
 	{
 
-		System.out.println("Starting proxy version 2.1.2 ...");
+		System.out.println("Starting proxy version " + PROXY_VERSION);
 		proxy.start();
 
 		// open up standard input

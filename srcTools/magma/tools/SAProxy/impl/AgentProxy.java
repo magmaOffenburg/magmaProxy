@@ -336,7 +336,7 @@ public class AgentProxy
 		 * @param action the action string
 		 * @return the action string prefixed with (syn)
 		 */
-		private byte[] prependSyn(byte[] action)
+		protected byte[] prependSyn(byte[] action)
 		{
 			byte[] result = new byte[SYNC_BYTES.length + action.length];
 			System.arraycopy(SYNC_BYTES, 0, result, 0, SYNC_BYTES.length);
