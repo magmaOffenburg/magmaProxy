@@ -1,5 +1,7 @@
 # magmaProxy
 
+[![Build Status](https://travis-ci.org/magmaOffenburg/magmaProxy.png)](https://travis-ci.org/magmaOffenburg/magmaProxy)
+
 Proxy for the [RoboCup 3D Soccer Simulation League](http://wiki.robocup.org/wiki/Soccer_Simulation_League) created by the [magmaOffenburg team](http://robocup.hs-offenburg.de/).
 
 The Simspark Agent Proxy is a proxy for client agents, connecting to the
