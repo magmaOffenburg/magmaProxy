@@ -44,7 +44,7 @@ The process of running a soccer game with the proxy is as follows:
 
 To simplify starting of the proxy, a start script is provided:
 
-`./start.sh <simspark-server-IP> <simspark-server-Port> <proxy-server-port>`
+`bash start.sh <simspark-server-IP> <simspark-server-Port> <proxy-server-port>`
 
 - `<simspark-server-IP>`: IP address of the soccer server.
 - `<simspark-server-Port>`: Port of the soccer server.
