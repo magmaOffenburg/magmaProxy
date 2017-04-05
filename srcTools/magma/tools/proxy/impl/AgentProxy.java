@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with it. If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
-package magma.tools.SAProxy.impl;
+package magma.tools.proxy.impl;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

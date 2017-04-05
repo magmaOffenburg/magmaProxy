@@ -17,10 +17,10 @@
  * You should have received a copy of the GNU General Public License
  * along with it. If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
-package magma.tools.SAProxy.impl;
+package magma.tools.proxy.impl;
 
 import static org.junit.Assert.assertEquals;
-import magma.tools.SAProxy.impl.AgentProxy.ClientActionsForwarder;
+import magma.tools.proxy.impl.AgentProxy.ClientActionsForwarder;
 
 import org.junit.Before;
 import org.junit.Test;

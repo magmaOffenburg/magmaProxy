@@ -17,22 +17,22 @@
  * You should have received a copy of the GNU General Public License
  * along with it. If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
-package magma.tools.SAProxy;
+package magma.tools.proxy;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import magma.tools.SAProxy.impl.AgentProxy;
-import magma.tools.SAProxy.impl.SimsparkAgentProxyServer;
-import magma.tools.SAProxy.impl.SimsparkAgentProxyServer.SimsparkAgentProxyServerParameter;
+import magma.tools.proxy.impl.AgentProxy;
+import magma.tools.proxy.impl.SimsparkAgentProxyServer;
+import magma.tools.proxy.impl.SimsparkAgentProxyServer.SimsparkAgentProxyServerParameter;
 
 /**
  * Proxy for RoboCup games.
  * @author Stefan Glaser
  */
-public class SAProxy
+public class MagmaProxy
 {
 	private static final String PROXY_VERSION = "2.1.3 ";
 
@@ -65,8 +65,7 @@ public class SAProxy
 	{
 		SimsparkAgentProxyServerParameter parameterObject = parseParameters(args);
 		SimsparkAgentProxyServer proxy = new SimsparkAgentProxyServer(parameterObject);
-		SAProxy saproxy = new SAProxy(proxy);
-		saproxy.mainLoop();
+		new MagmaProxy(proxy).run();
 	}
 
 	public static SimsparkAgentProxyServerParameter parseParameters(String[] args)
@@ -100,15 +99,12 @@ public class SAProxy
 		return parameterObject;
 	}
 
-	/**
-	 * @param proxy
-	 */
-	public SAProxy(SimsparkAgentProxyServer proxy)
+	public MagmaProxy(SimsparkAgentProxyServer proxy)
 	{
 		this.proxy = proxy;
 	}
 
-	public void mainLoop()
+	public void run()
 	{
 		System.out.println("Starting proxy version " + PROXY_VERSION);
 		proxy.start();

@@ -12,7 +12,7 @@
 
         <jar destfile="jar/magmaProxy.jar" basedir="${buildDir}">
             <manifest>
-                <attribute name="Main-Class" value="magma.tools.SAProxy.SAProxy"/>
+                <attribute name="Main-Class" value="magma.tools.proxy.MagmaProxy"/>
             </manifest>
         </jar>
     </target>
