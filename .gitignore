@@ -1,2 +1,5 @@
 .idea/
 *.iml
+.clang-format
+*.TMP
+*.java-*

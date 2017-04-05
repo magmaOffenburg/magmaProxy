@@ -28,7 +28,7 @@ import java.net.UnknownHostException;
  * This Class represents a proxy implementation for one client agent. One agent
  * proxy consists of two threads, one for forwarding agent actions and one for
  * forwarding server messages and maintaining sync time.
- * 
+ *
  * @author Stefan Glaser, Klaus Dorer
  */
 /**
@@ -80,8 +80,7 @@ public class AgentProxy
 	/** counts how many invalid say messages have been sent by client */
 	private int invalidSayMessageCount;
 
-	public AgentProxy(Socket clientSocket, String ssHost, int ssPort,
-			boolean showMessages)
+	public AgentProxy(Socket clientSocket, String ssHost, int ssPort, boolean showMessages)
 	{
 		this.showMessages = showMessages;
 		sentMessages = new MessageInfo(false);
@@ -91,8 +90,7 @@ public class AgentProxy
 		invalidSayMessageCount = 0;
 	}
 
-	public void start(Socket clientSocket, String ssHost, int ssPort,
-			boolean showMessages)
+	public void start(Socket clientSocket, String ssHost, int ssPort, boolean showMessages)
 	{
 		try {
 			System.out.print("Starting agent proxy for " + clientSocket + "... ");
@@ -142,18 +140,18 @@ public class AgentProxy
 
 	/**
 	 * Retrieve proxy status.
-	 * 
+	 *
 	 * @return true, if both proxy threads are active, false otherwise
 	 */
 	public boolean isActive()
 	{
-		return serverForwarder != null && clientForwarder != null
-				&& serverForwarder.isAlive() && clientForwarder.isAlive();
+		return serverForwarder != null && clientForwarder != null && serverForwarder.isAlive() &&
+				clientForwarder.isAlive();
 	}
 
 	/**
 	 * Send a message to the Simspark server.
-	 * 
+	 *
 	 * @param msg - the message to send
 	 */
 	private synchronized void sendServerMsg(byte[] msg)
@@ -167,7 +165,7 @@ public class AgentProxy
 
 	/**
 	 * Send a message to the client agent.
-	 * 
+	 *
 	 * @param msg - the message to send
 	 */
 	private void sendClientMsg(byte[] msg)
@@ -177,7 +175,7 @@ public class AgentProxy
 
 	/**
 	 * Receive a message from the Simspark sevrer. Blocking call.
-	 * 
+	 *
 	 * @return the next, complete message received from the Simspark server
 	 */
 	private byte[] receiveServerMsg()
@@ -187,7 +185,7 @@ public class AgentProxy
 
 	/**
 	 * Receive a message from the client agent. Blocking call.
-	 * 
+	 *
 	 * @return the next, complete message received from the client agent
 	 */
 	private byte[] receiveClientMsg()
@@ -243,8 +241,7 @@ public class AgentProxy
 				} else {
 					perception = onNewServerMessage(perception);
 					if (perception != null) {
-						receivedMessages.newMessage(perception.length,
-								receivedMessages.lastMessageTime);
+						receivedMessages.newMessage(perception.length, receivedMessages.lastMessageTime);
 
 						// forward perception message to client agent
 						sentMessagesWhenReceiving = sentMessages.count;
@@ -309,11 +306,9 @@ public class AgentProxy
 						// forward action message to Simspark server
 						action = onNewClientMessage(action);
 						if (action != null) {
-
 							action = checkSay(action);
 							sendServerMsg(action);
-							sentMessages.newMessage(action.length,
-									receivedMessages.lastMessageTime);
+							sentMessages.newMessage(action.length, receivedMessages.lastMessageTime);
 
 							if (serverForwarder == null) {
 								// with lazy connect we have to wait to listen for
@@ -370,8 +365,8 @@ public class AgentProxy
 							// check for invalid character range
 							// the \" is not checked since it is not explicitly
 							// forbidden in the manual
-							if (ascii > 126 || ascii < 32 || ascii == 40
-									|| ascii == 41 || ascii == 32 /* || ascii == 34 */) {
+							if (ascii > 126 || ascii < 32 || ascii == 40 || ascii == 41 ||
+									ascii == 32 /* || ascii == 34 */) {
 								wrongMsgComposition = true;
 							}
 						}
@@ -462,14 +457,10 @@ public class AgentProxy
 		@Override
 		public String toString()
 		{
-			String result = String
-					.format(
-							" count: %d avgSize: %4.2f maxSize: %d avgTimeDelta: %4.2f(ms)",
-							count, avgMessageSize, maxMessageSize,
-							avgMessageDelta / 1000000);
+			String result = String.format(" count: %d avgSize: %4.2f maxSize: %d avgTimeDelta: %4.2f(ms)", count,
+					avgMessageSize, maxMessageSize, avgMessageDelta / 1000000);
 			if (maxTimeInfoOk) {
-				result += String.format(" maxTimeDelta: %d(ms)",
-						maxMessageDelta / 1000000);
+				result += String.format(" maxTimeDelta: %d(ms)", maxMessageDelta / 1000000);
 			}
 			return result;
 		}

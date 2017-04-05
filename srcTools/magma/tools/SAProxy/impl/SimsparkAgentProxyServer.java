@@ -31,7 +31,7 @@ import java.util.ArrayList;
  * incoming connection is forwarded to an own {@link AgentProxy} instance, which
  * handles the synchronization of one specific agent with the server. The proxy
  * server and all its connections can be shut down using the shutdown method.
- * 
+ *
  * @author Stefan Glaser
  */
 public class SimsparkAgentProxyServer extends Thread
@@ -54,8 +54,7 @@ public class SimsparkAgentProxyServer extends Thread
 	/** true if messages should be printed from start */
 	protected boolean showMessages;
 
-	public SimsparkAgentProxyServer(
-			SimsparkAgentProxyServerParameter parameterObject)
+	public SimsparkAgentProxyServer(SimsparkAgentProxyServerParameter parameterObject)
 	{
 		this.proxyPort = parameterObject.getProxyPort();
 		this.ssHost = parameterObject.getSsHost();
@@ -110,8 +109,7 @@ public class SimsparkAgentProxyServer extends Thread
 	 */
 	protected AgentProxy createAgentProxy(Socket clientSocket)
 	{
-		AgentProxy agentProxy = new AgentProxy(clientSocket, ssHost, ssPort,
-				showMessages);
+		AgentProxy agentProxy = new AgentProxy(clientSocket, ssHost, ssPort, showMessages);
 		agentProxy.start(clientSocket, ssHost, ssPort, showMessages);
 		return agentProxy;
 	}
@@ -132,7 +130,7 @@ public class SimsparkAgentProxyServer extends Thread
 
 	/**
 	 * Retrieve the current list of agent proxies.
-	 * 
+	 *
 	 * @return current list of agent proxies
 	 */
 	public ArrayList<AgentProxy> getAgentProxies()
@@ -151,10 +149,9 @@ public class SimsparkAgentProxyServer extends Thread
 		private boolean showMessages;
 
 		/**
-		 * 
+		 *
 		 */
-		public SimsparkAgentProxyServerParameter(int proxyPort, String ssHost,
-				int ssPort, boolean showMessages)
+		public SimsparkAgentProxyServerParameter(int proxyPort, String ssHost, int ssPort, boolean showMessages)
 		{
 			this.proxyPort = proxyPort;
 			this.ssHost = ssHost;

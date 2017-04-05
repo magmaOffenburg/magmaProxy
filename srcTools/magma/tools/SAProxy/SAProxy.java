@@ -40,7 +40,7 @@ public class SAProxy
 
 	/**
 	 * Instantiates and starts the Simspark agent proxy.
-	 * 
+	 *
 	 * @param args Command line arguments <br>
 	 *        <table>
 	 *        <tr>
@@ -64,8 +64,7 @@ public class SAProxy
 	public static void main(String[] args)
 	{
 		SimsparkAgentProxyServerParameter parameterObject = parseParameters(args);
-		SimsparkAgentProxyServer proxy = new SimsparkAgentProxyServer(
-				parameterObject);
+		SimsparkAgentProxyServer proxy = new SimsparkAgentProxyServer(parameterObject);
 		SAProxy saproxy = new SAProxy(proxy);
 		saproxy.mainLoop();
 	}
@@ -91,13 +90,13 @@ public class SAProxy
 			} else {
 				System.out.println("Unknown Parameter: " + arg);
 				System.out.println("Usage example: --proxyport=3110"
-						+ " --server=127.0.0.1 --serverport=3100");
+								   + " --server=127.0.0.1 --serverport=3100");
 				System.out.println("Use --verbose to display all messages");
 			}
 		}
 
-		SimsparkAgentProxyServerParameter parameterObject = new SimsparkAgentProxyServerParameter(
-				proxyPort, ssHost, ssPort, showMessages);
+		SimsparkAgentProxyServerParameter parameterObject =
+				new SimsparkAgentProxyServerParameter(proxyPort, ssHost, ssPort, showMessages);
 		return parameterObject;
 	}
 
@@ -111,7 +110,6 @@ public class SAProxy
 
 	public void mainLoop()
 	{
-
 		System.out.println("Starting proxy version " + PROXY_VERSION);
 		proxy.start();
 
@@ -157,8 +155,7 @@ public class SAProxy
 				for (int i = 0, index = 1; i < agentProxies.size(); i++) {
 					agentProxy = agentProxies.get(i);
 					if (agentProxy.isActive()) {
-						System.out.println(index + ". "
-								+ agentProxy.toStringVerbose());
+						System.out.println(index + ". " + agentProxy.toStringVerbose());
 						index++;
 					}
 				}
@@ -191,10 +188,8 @@ public class SAProxy
 				System.out.println("Command \"" + input + "\" unknown!");
 				System.out.println("Known commands:");
 				System.out.println("q; quit\t\t--> exit proxy server application");
-				System.out
-						.println("l; list\t\t--> list active agent proxy instances");
-				System.out
-						.println("v; verbose\t--> list active agent proxy instances verbosely");
+				System.out.println("l; list\t\t--> list active agent proxy instances");
+				System.out.println("v; verbose\t--> list active agent proxy instances verbosely");
 				System.out.println("s; status\t--> print proxy status");
 				System.out.println("m; \t--> print start of all client messages");
 				System.out.println("n; \t--> print start of all server messages");

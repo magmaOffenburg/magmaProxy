@@ -71,9 +71,9 @@ public class AgentProxyTest
 	{
 		ClientActionsForwarder forwarder = testee.new ClientActionsForwarder();
 		String msg = "(lae1 0)(rae1 0)(lae2 0)(rae2 0)(lae3 0)(rae3 0)(lae4 0)"
-				+ "(rae4 0)(lle1 0)(rle1 0)(lle2 0)(rle2 0)(lle3 0)(rle3 -0.347824)"
-				+ "(lle4 0)(rle4 0.322004)(lle5 0)(rle5 0)(lle6 0)(rle6 0)(lle7 0)"
-				+ "(rle7 0)(he1 -6)(he2 0)(say u11rc03.92947)";
+					 + "(rae4 0)(lle1 0)(rle1 0)(lle2 0)(rle2 0)(lle3 0)(rle3 -0.347824)"
+					 + "(lle4 0)(rle4 0.322004)(lle5 0)(rle5 0)(lle6 0)(rle6 0)(lle7 0)"
+					 + "(rle7 0)(he1 -6)(he2 0)(say u11rc03.92947)";
 		byte[] action = msg.getBytes();
 		forwarder.checkSay(action);
 		assertEquals(0, testee.getInvalidSayMessageCount());

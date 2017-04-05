@@ -29,7 +29,7 @@ import java.net.UnknownHostException;
 
 /**
  * A simple connection class, wrapping the communication from and to one socket.
- * 
+ *
  * @author Stefan Glaser
  */
 public class Connection
@@ -65,8 +65,7 @@ public class Connection
 	 * @throws UnknownHostException
 	 * @throws IOException
 	 */
-	public Connection(String host, int port) throws UnknownHostException,
-			IOException
+	public Connection(String host, int port) throws UnknownHostException, IOException
 	{
 		this.host = host;
 		this.port = port;
@@ -126,7 +125,7 @@ public class Connection
 
 	/**
 	 * Send a message using the given stream
-	 * 
+	 *
 	 * @param msg Message in ASCII form
 	 * @throws IOException
 	 * @throws SocketException
@@ -154,8 +153,7 @@ public class Connection
 			}
 
 			if (messageDisplay) {
-				System.out.println(new String(msg).substring(0,
-						Math.min(40, msg.length)));
+				System.out.println(new String(msg).substring(0, Math.min(40, msg.length)));
 			}
 
 			int len = msg.length;
@@ -177,7 +175,7 @@ public class Connection
 
 	/**
 	 * Receive a message from the given stream. Blocking call.
-	 * 
+	 *
 	 * @param in - the stream to receive a message from
 	 * @return the next, complete received message, or null if the connection was
 	 *         closed
@@ -212,8 +210,7 @@ public class Connection
 			}
 
 		} catch (IOException e) {
-			System.out.println("Exception when receiving message on socket: "
-					+ socket.toString() + " Message: " + e);
+			System.out.println("Exception when receiving message on socket: " + socket.toString() + " Message: " + e);
 			disconnect();
 			return null;
 		}
