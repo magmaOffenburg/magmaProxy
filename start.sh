@@ -20,7 +20,7 @@
 #!/bin/bash
 ###########################################
 # Starts a simulation server proxy
-# example: ./startProxy.sh  127.0.0.1 3100 3110
+# example: ./start.sh  127.0.0.1 3100 3110
 ###########################################
 
 if [ $# -ne 3 ]; then
