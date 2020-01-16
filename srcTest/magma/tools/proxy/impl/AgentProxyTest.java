@@ -20,8 +20,8 @@
 package magma.tools.proxy.impl;
 
 import static org.junit.Assert.assertEquals;
-import magma.tools.proxy.impl.AgentProxy.ClientActionsForwarder;
 
+import magma.tools.proxy.impl.AgentProxy.ClientActionsForwarder;
 import org.junit.Before;
 import org.junit.Test;
 
