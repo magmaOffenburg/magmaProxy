@@ -217,47 +217,44 @@ public class AgentProxy
 		@Override
 		public void run()
 		{
-			boolean shutdown = false;
-
 			// some clients where hanging, when sending the scene
 			// string and not getting a server message
 			sendServerMsg(SYNC_BYTES);
 
-			while (!shutdown) {
+			while (true) {
 				byte[] perception = receiveServerMsg();
-
 				if (perception == null) {
 					// shutdown when receiving null-message
-					shutdown = true;
-				} else {
-					perception = onNewServerMessage(perception);
-					if (perception != null) {
-						receivedMessages.newMessage(perception.length, receivedMessages.lastMessageTime);
+					break;
+				}
 
-						// forward perception message to client agent
-						sentMessagesWhenReceiving = sentMessages.count;
-						haveSynMessage = false;
-						sendClientMsg(perception);
+				perception = onNewServerMessage(perception);
+				if (perception != null) {
+					receivedMessages.newMessage(perception.length, receivedMessages.lastMessageTime);
+
+					// forward perception message to client agent
+					sentMessagesWhenReceiving = sentMessages.count;
+					haveSynMessage = false;
+					sendClientMsg(perception);
+				}
+
+				// If there is already another message in the input channel, skip
+				// waiting time and sending of sync-message, until we run
+				// synchronous again.
+				if (!serverConnection.inputAvailable()) {
+					// wait for 20ms
+					try {
+						Thread.sleep(MAX_WAIT_TIME / 2);
+						if (!haveSynMessage) {
+							Thread.sleep(MAX_WAIT_TIME / 2);
+						}
+					} catch (InterruptedException e) {
+						e.printStackTrace();
 					}
 
-					// If there is already another message in the input channel, skip
-					// waiting time and sending of sync-message, until we run
-					// synchronous again.
-					if (!serverConnection.inputAvailable()) {
-						// wait for 20ms
-						try {
-							Thread.sleep(MAX_WAIT_TIME / 2);
-							if (!haveSynMessage) {
-								Thread.sleep(MAX_WAIT_TIME / 2);
-							}
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-
-						// send sync message to Simspark server
-						if (!haveSynMessage) {
-							sendServerMsg(SYNC_BYTES);
-						}
+					// send sync message to Simspark server
+					if (!haveSynMessage) {
+						sendServerMsg(SYNC_BYTES);
 					}
 				}
 			}
@@ -276,38 +273,34 @@ public class AgentProxy
 		@Override
 		public void run()
 		{
-			boolean shutdown = false;
-
-			while (!shutdown) {
+			while (true) {
 				// receive next client action message
 				byte[] action = receiveClientMsg();
-
 				if (action == null) {
 					// shutdown when receiving null-message
-					shutdown = true;
-				} else {
-					if (findBytes(action, SYNC_BYTES)) {
-						haveSynMessage = true;
-						// prefix (syn) to avoid server from hanging in case of bad
-						// say messages
-						action = prependSyn(action);
-					}
+					break;
+				}
 
-					if (action.length > 0) {
-						// forward action message to Simspark server
-						action = onNewClientMessage(action);
-						if (action != null) {
-							action = checkSay(action);
-							sendServerMsg(action);
-							sentMessages.newMessage(action.length, receivedMessages.lastMessageTime);
+				if (findBytes(action, SYNC_BYTES)) {
+					haveSynMessage = true;
+					// prefix (syn) to avoid server from hanging in case of bad
+					// say messages
+					action = prependSyn(action);
+				}
 
-							if (serverForwarder == null) {
-								// with lazy connect we have to wait to listen for
-								// server
-								// messages until here
-								serverForwarder = new ServerPerceptionsForwarder();
-								serverForwarder.start();
-							}
+				if (action.length > 0) {
+					// forward action message to Simspark server
+					action = onNewClientMessage(action);
+					if (action != null) {
+						action = checkSay(action);
+						sendServerMsg(action);
+						sentMessages.newMessage(action.length, receivedMessages.lastMessageTime);
+
+						if (serverForwarder == null) {
+							// with lazy connect we have to wait to listen for
+							// server messages until here
+							serverForwarder = new ServerPerceptionsForwarder();
+							serverForwarder.start();
 						}
 					}
 				}

@@ -33,7 +33,7 @@ import magma.tools.proxy.impl.SimsparkAgentProxyServer.SimsparkAgentProxyServerP
  */
 public class MagmaProxy
 {
-	private static final String PROXY_VERSION = "2.1.3 ";
+	private static final String PROXY_VERSION = "2.1.3";
 
 	private SimsparkAgentProxyServer proxy;
 
@@ -83,7 +83,6 @@ public class MagmaProxy
 				ssPort = Integer.parseInt(arg.replaceFirst("--serverport=", ""));
 			} else if (arg.startsWith("--verbose")) {
 				showMessages = true;
-				;
 			} else {
 				System.out.println("Unknown Parameter: " + arg);
 				System.out.println("Usage example: --proxyport=3110"
