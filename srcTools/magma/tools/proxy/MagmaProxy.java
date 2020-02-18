@@ -85,8 +85,7 @@ public class MagmaProxy
 				showMessages = true;
 			} else {
 				System.out.println("Unknown Parameter: " + arg);
-				System.out.println("Usage example: --proxyport=3110"
-								   + " --server=127.0.0.1 --serverport=3100");
+				System.out.println("Usage example: --proxyport=3110 --server=127.0.0.1 --serverport=3100");
 				System.out.println("Use --verbose to display all messages");
 			}
 		}
@@ -118,64 +117,66 @@ public class MagmaProxy
 				break;
 			}
 
-			if ("q".equals(input) || "quit".equals(input)) {
+			ArrayList<AgentProxy> agentProxies = proxy.getAgentProxies();
+
+			switch (input) {
+			case "q":
+			case "quit":
 				// shutdown
-
 				shutdown = true;
-			} else if ("l".equals(input) || "list".equals(input)) {
+				break;
+
+			case "l":
+			case "list":
 				// list active agent proxies
-
-				ArrayList<AgentProxy> agentProxies = proxy.getAgentProxies();
-				AgentProxy agentProxy;
-
 				System.out.println("Active agents:");
-				for (int i = 0, index = 1; i < agentProxies.size(); i++) {
-					agentProxy = agentProxies.get(i);
+				for (int i = 0; i < agentProxies.size(); i++) {
+					AgentProxy agentProxy = agentProxies.get(i);
 					if (agentProxy.isActive()) {
-						System.out.println(index + ". " + agentProxy);
-						index++;
+						System.out.println((i + 1) + ". " + agentProxy);
 					}
 				}
-			} else if ("v".equals(input) || "verbose".equals(input)) {
+				break;
+
+			case "v":
+			case "verbose":
 				// verbosely list active agent proxies
-
-				ArrayList<AgentProxy> agentProxies = proxy.getAgentProxies();
-				AgentProxy agentProxy;
-
 				System.out.println("Active agents:");
-				for (int i = 0, index = 1; i < agentProxies.size(); i++) {
-					agentProxy = agentProxies.get(i);
+				for (int i = 0; i < agentProxies.size(); i++) {
+					AgentProxy agentProxy = agentProxies.get(i);
 					if (agentProxy.isActive()) {
-						System.out.println(index + ". " + agentProxy.toStringVerbose());
-						index++;
+						System.out.println((i + 1) + ". " + agentProxy.toStringVerbose());
 					}
 				}
-			} else if ("s".equals(input) || "status".equals(input)) {
+				break;
+
+			case "s":
+			case "status":
 				// print proxy status
-
-				ArrayList<AgentProxy> agentProxies = proxy.getAgentProxies();
-
 				System.out.println("Proxy thread alive: " + proxy.isAlive());
 				System.out.println("All agents (" + agentProxies.size() + "):");
 				for (int i = 0; i < agentProxies.size(); i++) {
 					System.out.println((i + 1) + ". " + agentProxies.get(i));
 				}
+				break;
 
-			} else if ("m".equals(input)) {
+			case "m":
 				// switch messages on/off
-				ArrayList<AgentProxy> agentProxies = proxy.getAgentProxies();
 				System.out.println("Proxy thread alive: " + proxy.isAlive());
 				for (AgentProxy agentProxy : agentProxies) {
 					agentProxy.switchClientMessageDisplay();
 				}
-			} else if ("n".equals(input)) {
+				break;
+
+			case "n":
 				// switch messages on/off
-				ArrayList<AgentProxy> agentProxies = proxy.getAgentProxies();
 				System.out.println("Proxy thread alive: " + proxy.isAlive());
 				for (AgentProxy agentProxy : agentProxies) {
 					agentProxy.switchServerMessageDisplay();
 				}
-			} else {
+				break;
+
+			default:
 				System.out.println("Command \"" + input + "\" unknown!");
 				System.out.println("Known commands:");
 				System.out.println("q; quit\t\t--> exit proxy server application");
@@ -184,6 +185,7 @@ public class MagmaProxy
 				System.out.println("s; status\t--> print proxy status");
 				System.out.println("m; \t--> print start of all client messages");
 				System.out.println("n; \t--> print start of all server messages");
+				break;
 			}
 		}
 

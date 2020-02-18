@@ -474,7 +474,7 @@ public class AgentProxy
 
 	/**
 	 * Called before a client message has been forwarded to the server
-	 * @param message the message received fromt the client
+	 * @param message the message received from the client
 	 * @return the message that should be forwarded to the server, null if no
 	 *         forward
 	 */
