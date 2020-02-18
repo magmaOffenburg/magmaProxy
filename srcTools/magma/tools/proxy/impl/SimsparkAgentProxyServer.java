@@ -61,7 +61,7 @@ public class SimsparkAgentProxyServer extends Thread
 		this.ssPort = parameterObject.getSsPort();
 		this.showMessages = parameterObject.isShowMessages();
 
-		agentProxies = new ArrayList<AgentProxy>();
+		agentProxies = new ArrayList<>();
 	}
 
 	@Override
@@ -148,9 +148,6 @@ public class SimsparkAgentProxyServer extends Thread
 
 		private boolean showMessages;
 
-		/**
-		 *
-		 */
 		public SimsparkAgentProxyServerParameter(int proxyPort, String ssHost, int ssPort, boolean showMessages)
 		{
 			this.proxyPort = proxyPort;
@@ -159,33 +156,21 @@ public class SimsparkAgentProxyServer extends Thread
 			this.showMessages = showMessages;
 		}
 
-		/**
-		 * @return the proxyPort
-		 */
 		public int getProxyPort()
 		{
 			return proxyPort;
 		}
 
-		/**
-		 * @return the ssHost
-		 */
 		public String getSsHost()
 		{
 			return ssHost;
 		}
 
-		/**
-		 * @return the ssPort
-		 */
 		public int getSsPort()
 		{
 			return ssPort;
 		}
 
-		/**
-		 * @return the showMessages
-		 */
 		public boolean isShowMessages()
 		{
 			return showMessages;

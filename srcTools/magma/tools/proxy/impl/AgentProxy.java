@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * This Class represents a proxy implementation for one client agent. One agent
@@ -106,9 +107,6 @@ public class AgentProxy
 			clientForwarder.start();
 
 			System.out.println("done.");
-		} catch (UnknownHostException e) {
-			System.out.println("FAILED! (" + e.getMessage() + ")");
-			stopProxy();
 		} catch (IOException e) {
 			System.out.println("FAILED! (" + e.getMessage() + ")");
 			stopProxy();
@@ -197,21 +195,14 @@ public class AgentProxy
 	public String toString()
 	{
 		String connectedString = isActive() ? "active" : "inactive";
-		StringBuilder result = new StringBuilder(100);
-		result.append("Agent (" + connectedString + "):");
-		result.append(" missed: " + missedCycles);
-		result.append(" invalid say: " + invalidSayMessageCount);
-		result.append(" connection: " + clientConnection);
-		return result.toString();
+		return "Agent (" + connectedString + "):"
+				+ " missed: " + missedCycles + " invalid say: " + invalidSayMessageCount +
+				" connection: " + clientConnection;
 	}
 
 	public String toStringVerbose()
 	{
-		StringBuilder result = new StringBuilder(100);
-		result.append(toString());
-		result.append("\nsent: " + sentMessages);
-		result.append("\nreceived: " + receivedMessages);
-		return result.toString();
+		return toString() + "\nsent: " + sentMessages + "\nreceived: " + receivedMessages;
 	}
 
 	/**
@@ -342,53 +333,48 @@ public class AgentProxy
 		protected byte[] checkSay(byte[] action)
 		{
 			boolean wrongMsgComposition = false;
-			try {
-				String msg = new String(action, "UTF-8");
+			String msg = new String(action, StandardCharsets.UTF_8);
 
-				int initSay = msg.indexOf("(say");
-				int endSay;
+			int initSay = msg.indexOf("(say");
+			int endSay;
 
-				if (initSay != -1) {
-					char nextCharAfterSay;
-					endSay = msg.indexOf(")", initSay);
-					nextCharAfterSay = '(';
-					if (endSay < msg.length() - 1) {
-						nextCharAfterSay = msg.charAt(endSay + 1);
-					}
+			if (initSay != -1) {
+				char nextCharAfterSay;
+				endSay = msg.indexOf(")", initSay);
+				nextCharAfterSay = '(';
+				if (endSay < msg.length() - 1) {
+					nextCharAfterSay = msg.charAt(endSay + 1);
+				}
 
-					if (nextCharAfterSay != '(' && nextCharAfterSay != '\0') {
-						endSay = msg.indexOf(")", endSay + 1);
-						wrongMsgComposition = true;
-					} else {
-						for (int i = initSay + 5; i < endSay; i++) {
-							int ascii = msg.charAt(i);
-							// check for invalid character range
-							// the \" is not checked since it is not explicitly
-							// forbidden in the manual
-							if (ascii > 126 || ascii < 32 || ascii == 40 || ascii == 41 ||
-									ascii == 32 /* || ascii == 34 */) {
-								wrongMsgComposition = true;
-							}
+				if (nextCharAfterSay != '(' && nextCharAfterSay != '\0') {
+					endSay = msg.indexOf(")", endSay + 1);
+					wrongMsgComposition = true;
+				} else {
+					for (int i = initSay + 5; i < endSay; i++) {
+						int ascii = msg.charAt(i);
+						// check for invalid character range
+						// the \" is not checked since it is not explicitly
+						// forbidden in the manual
+						if (ascii > 126 || ascii < 32 || ascii == 40 || ascii == 41 ||
+								ascii == 32 /* || ascii == 34 */) {
+							wrongMsgComposition = true;
+							break;
 						}
 					}
-					if (wrongMsgComposition) {
-						// System.out.println("Invalid say: " + msg);
-						// switched off changing message
-						// StringBuffer s = new StringBuffer(msg);
-						// s.delete(initSay, endSay + 1);
-						// s.insert(0, "(syn)");
-						// msg = s.toString();
-						invalidSayMessageCount++;
-					}
 				}
-				// switched off to change the message, but we want to count invalid
-				// messages
-				// return msg.getBytes();
-				return action;
-
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+				if (wrongMsgComposition) {
+					// System.out.println("Invalid say: " + msg);
+					// switched off changing message
+					// StringBuffer s = new StringBuffer(msg);
+					// s.delete(initSay, endSay + 1);
+					// s.insert(0, "(syn)");
+					// msg = s.toString();
+					invalidSayMessageCount++;
+				}
 			}
+			// switched off to change the message, but we want to count invalid
+			// messages
+			// return msg.getBytes();
 			return action;
 		}
 
@@ -409,7 +395,7 @@ public class AgentProxy
 		}
 	}
 
-	private class MessageInfo
+	private static class MessageInfo
 	{
 		private int count;
 

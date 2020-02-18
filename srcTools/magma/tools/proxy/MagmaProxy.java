@@ -74,14 +74,13 @@ public class MagmaProxy
 		int ssPort = 3100;
 		boolean showMessages = false;
 
-		for (int i = 0; i < args.length; i++) {
-			String arg = args[i];
+		for (String arg : args) {
 			if (arg.startsWith("--proxyport=")) {
-				proxyPort = Integer.valueOf(arg.replaceFirst("--proxyport=", ""));
+				proxyPort = Integer.parseInt(arg.replaceFirst("--proxyport=", ""));
 			} else if (arg.startsWith("--server=")) {
 				ssHost = arg.replaceFirst("--server=", "");
 			} else if (arg.startsWith("--serverport=")) {
-				ssPort = Integer.valueOf(arg.replaceFirst("--serverport=", ""));
+				ssPort = Integer.parseInt(arg.replaceFirst("--serverport=", ""));
 			} else if (arg.startsWith("--verbose")) {
 				showMessages = true;
 				;
@@ -93,9 +92,7 @@ public class MagmaProxy
 			}
 		}
 
-		SimsparkAgentProxyServerParameter parameterObject =
-				new SimsparkAgentProxyServerParameter(proxyPort, ssHost, ssPort, showMessages);
-		return parameterObject;
+		return new SimsparkAgentProxyServerParameter(proxyPort, ssHost, ssPort, showMessages);
 	}
 
 	public MagmaProxy(SimsparkAgentProxyServer proxy)
@@ -141,7 +138,7 @@ public class MagmaProxy
 					}
 				}
 			} else if ("v".equals(input) || "verbose".equals(input)) {
-				// verbosly list active agent proxies
+				// verbosely list active agent proxies
 
 				ArrayList<AgentProxy> agentProxies = proxy.getAgentProxies();
 				AgentProxy agentProxy;
@@ -169,15 +166,15 @@ public class MagmaProxy
 				// switch messages on/off
 				ArrayList<AgentProxy> agentProxies = proxy.getAgentProxies();
 				System.out.println("Proxy thread alive: " + proxy.isAlive());
-				for (int i = 0; i < agentProxies.size(); i++) {
-					agentProxies.get(i).switchClientMessageDisplay();
+				for (AgentProxy agentProxy : agentProxies) {
+					agentProxy.switchClientMessageDisplay();
 				}
 			} else if ("n".equals(input)) {
 				// switch messages on/off
 				ArrayList<AgentProxy> agentProxies = proxy.getAgentProxies();
 				System.out.println("Proxy thread alive: " + proxy.isAlive());
-				for (int i = 0; i < agentProxies.size(); i++) {
-					agentProxies.get(i).switchServerMessageDisplay();
+				for (AgentProxy agentProxy : agentProxies) {
+					agentProxy.switchServerMessageDisplay();
 				}
 			} else {
 				System.out.println("Command \"" + input + "\" unknown!");

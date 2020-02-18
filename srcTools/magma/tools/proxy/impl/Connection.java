@@ -62,10 +62,8 @@ public class Connection
 	 * Constructor to create a connection that does lazy connect on first send.
 	 * @param host host address to connect to
 	 * @param port port to connect to
-	 * @throws UnknownHostException
-	 * @throws IOException
 	 */
-	public Connection(String host, int port) throws UnknownHostException, IOException
+	public Connection(String host, int port)
 	{
 		this.host = host;
 		this.port = port;
@@ -85,7 +83,7 @@ public class Connection
 		connect();
 	}
 
-	private void connect() throws SocketException, IOException
+	private void connect() throws IOException
 	{
 		socket.setTcpNoDelay(true);
 
@@ -127,8 +125,6 @@ public class Connection
 	 * Send a message using the given stream
 	 *
 	 * @param msg Message in ASCII form
-	 * @throws IOException
-	 * @throws SocketException
 	 */
 	public void sendMessage(byte[] msg)
 	{
@@ -176,7 +172,6 @@ public class Connection
 	/**
 	 * Receive a message from the given stream. Blocking call.
 	 *
-	 * @param in - the stream to receive a message from
 	 * @return the next, complete received message, or null if the connection was
 	 *         closed
 	 */
