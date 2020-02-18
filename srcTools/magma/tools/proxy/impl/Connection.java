@@ -227,7 +227,7 @@ public class Connection
 		return socket.toString();
 	}
 
-	public void switchMessageDisplay()
+	public void toggleMessageDisplay()
 	{
 		messageDisplay = !messageDisplay;
 	}

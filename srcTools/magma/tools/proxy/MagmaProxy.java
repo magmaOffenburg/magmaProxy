@@ -164,7 +164,7 @@ public class MagmaProxy
 				// switch messages on/off
 				System.out.println("Proxy thread alive: " + proxy.isAlive());
 				for (AgentProxy agentProxy : agentProxies) {
-					agentProxy.switchClientMessageDisplay();
+					agentProxy.toggleClientMessageDisplay();
 				}
 				break;
 
@@ -172,7 +172,7 @@ public class MagmaProxy
 				// switch messages on/off
 				System.out.println("Proxy thread alive: " + proxy.isAlive());
 				for (AgentProxy agentProxy : agentProxies) {
-					agentProxy.switchServerMessageDisplay();
+					agentProxy.toggleServerMessageDisplay();
 				}
 				break;
 

@@ -20,9 +20,7 @@
 package magma.tools.proxy.impl;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -98,8 +96,8 @@ public class AgentProxy
 			clientConnection = new Connection(clientSocket);
 			serverConnection = new Connection(ssHost, ssPort);
 			if (showMessages) {
-				clientConnection.switchMessageDisplay();
-				serverConnection.switchMessageDisplay();
+				clientConnection.toggleMessageDisplay();
+				serverConnection.toggleMessageDisplay();
 			}
 
 			clientForwarder = new ClientActionsForwarder();
@@ -448,17 +446,17 @@ public class AgentProxy
 	/**
 	 * Switches on/off messages sent to the client
 	 */
-	public void switchClientMessageDisplay()
+	public void toggleClientMessageDisplay()
 	{
-		clientConnection.switchMessageDisplay();
+		clientConnection.toggleMessageDisplay();
 	}
 
 	/**
 	 * Switches on/off messages sent to the server
 	 */
-	public void switchServerMessageDisplay()
+	public void toggleServerMessageDisplay()
 	{
-		serverConnection.switchMessageDisplay();
+		serverConnection.toggleMessageDisplay();
 	}
 
 	/**
