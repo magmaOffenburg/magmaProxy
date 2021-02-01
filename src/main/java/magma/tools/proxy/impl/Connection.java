@@ -24,8 +24,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 /**
  * A simple connection class, wrapping the communication from and to one socket.
