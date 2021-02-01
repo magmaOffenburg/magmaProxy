@@ -7,10 +7,9 @@ Proxy for the [RoboCup 3D Soccer Simulation League](http://wiki.robocup.org/wiki
 The Simspark Agent Proxy is a proxy for client agents, connecting to the
 Simspark server. Its main purpose is to ensure independence of network
 issues/delays, by monitoring think cycle times of agents on the client machine.
-The proxy is developed using Java 1.6.
-It should be compatible with older JREs, too, but this is not verified.
+The proxy is developed using Java 1.7.
 
-![](screenshots/magmaProxy.png)
+![Runtime architecture](screenshots/magmaProxy.png)
 
 ## Contents
 
@@ -24,12 +23,20 @@ It should be compatible with older JREs, too, but this is not verified.
 
 ## Installation
 
-- Clone the repository: `git clone https://github.com/magmaOffenburg/magmaProxy`.
+### Prerequisites
 - Make sure you have Java installed and available on your command line.
-- Make sure you have [simspark and rcsserver3d](http://simspark.sourceforge.net/wiki/index.php/Main_Page) installed and the command `rcssserver3d` is available on your command line.
-- The proxy itself does not require an installation.
+- Make sure you have [simspark and rcsserver3d](https://gitlab.com/robocup-sim/SimSpark/-/wikis/home) installed and the command `rcssserver3d` is available on your command line.
 
-For contributions, please set up `clang-format` as described [here](https://github.com/hsoautonomy/formatting). 
+### Getting the prebuilt bersion
+We provide a prebuilt version of the magmaProxy. You can download the latest version from the [Releases page](https://github.com/magmaOffenburg/magmaProxy/releases) (e.g. `magmaProxy-2.1.4.zip`). The Zip file contains the JAR file as well as the start script.
+
+### Building from source
+- Clone the repository: `git clone https://github.com/magmaOffenburg/magmaProxy.git`.
+- Switch into the project's root directory.
+- If you have Maven installed and available on your command line, run `mvn package`. Else, we also added a Maven wrapper to the project: run `./mvnw package` instead to use it.
+- In the target directory, you should now find a Zip file similar to the prebuilt version.
+
+The proxy itself does not require any further installation. Running the start script or the JAR file is sufficient. (Note: the start script has to stay in the same directory as the JAR file).
 
 ## Preparation
 Before you can use the proxy, you have to configure the soccer server to run in sync mode.
@@ -49,7 +56,6 @@ To simplify starting of the proxy, a start script is provided:
 - `<simspark-server-IP>`: IP address of the soccer server.
 - `<simspark-server-Port>`: Port of the soccer server.
 - `<proxy-server-port>`: Port on the proxy's machine to which the players have to connect.
-
 
 ## Command Line Interface
 
@@ -81,9 +87,9 @@ messages after the specified time, until the next "sync"-command has been send.
 
 ## Implementation
 The SimSpark Agent Proxy is implemented in Java and separated across four classes: 
-SAProxy, SimsparkAgentProxyServer, AgentProxy and Connection. 
+MagmaProxy, SimsparkAgentProxyServer, AgentProxy and Connection. 
 
-- The SAProxy class contains the main function and provides a command line interface to monitor the proxy server. 
+- The MagmaProxy class contains the main function and provides a command line interface to monitor the proxy server. 
 It currently only maintains one proxy server instance. 
 
 - The SimsparkAgentProxyServer is the actual proxy server thread. 
@@ -106,3 +112,8 @@ The SimSpark Agent Proxy has following command line parameters:
 - `--serverport=<port>` : The SimSpark server port 
 - `--proxyport=<port>` : The proxy server port for incoming connections
 - `--verbose` : Prints the messages of all agents
+- `--daemon` : Disables the command line interface (necessary when running in background)
+
+## Contributing
+
+For contributions, please set up `clang-format` as described [here](https://github.com/hsoautonomy/formatting). 
