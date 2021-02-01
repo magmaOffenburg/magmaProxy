@@ -33,7 +33,7 @@ import magma.tools.proxy.impl.SimsparkAgentProxyServer.SimsparkAgentProxyServerP
  */
 public class MagmaProxy
 {
-	private static final String PROXY_VERSION = "2.1.4-SNAPSHOT";
+	private static final String PROXY_VERSION = "2.1.4";
 
 	private SimsparkAgentProxyServer proxy;
 
@@ -103,7 +103,7 @@ public class MagmaProxy
 
 	public void run(boolean daemon)
 	{
-		System.out.println("Starting proxy version " + PROXY_VERSION);
+		System.out.println("Starting magmaProxy version " + PROXY_VERSION);
 		proxy.start();
 
 		if (daemon) {
