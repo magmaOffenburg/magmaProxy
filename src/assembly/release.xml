@@ -13,7 +13,7 @@
       <file>
          <source>${project.build.directory}/${project.artifactId}-${project.version}.jar</source>
          <outputDirectory>/</outputDirectory>
-         <destName>${project.artifactId}.jar</destName>
+         <destName>${project.name}.jar</destName>
       </file>
       <file>
           <source>${project.basedir}/scripts/start.sh</source>

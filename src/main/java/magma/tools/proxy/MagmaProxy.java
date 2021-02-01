@@ -58,6 +58,10 @@ public class MagmaProxy
 	 *        <td>--verbose</td>
 	 *        <td>Shows the messages</td>
 	 *        </tr>
+	 *        <tr>
+	 *        <td>--daemon</td>
+	 *        <td>Disables the command line interface</td>
+	 *        </tr>
 	 *        </table>
 	 */
 	public static void main(String[] args)
