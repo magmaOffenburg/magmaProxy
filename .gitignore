@@ -9,3 +9,14 @@ build/
 .idea/**/watcherTasks.xml
 .idea/**/uiDesigner.xml
 .idea/dictionaries
+.idea/libraries
+.idea/artifacts
+.idea/compiler.xml
+.idea/jarRepositories.xml
+.idea/modules.xml
+.idea/*.iml
+.idea/modules
+*.ipr
+
+# Maven
+target/
