@@ -33,7 +33,7 @@ import magma.tools.proxy.impl.SimsparkAgentProxyServer.SimsparkAgentProxyServerP
  */
 public class MagmaProxy
 {
-	private static final String PROXY_VERSION = "2.1.3";
+	private static final String PROXY_VERSION = "2.1.4-SNAPSHOT";
 
 	private SimsparkAgentProxyServer proxy;
 
@@ -64,7 +64,7 @@ public class MagmaProxy
 	{
 		SimsparkAgentProxyServerParameter parameterObject = parseParameters(args);
 		SimsparkAgentProxyServer proxy = new SimsparkAgentProxyServer(parameterObject);
-		new MagmaProxy(proxy).run();
+		new MagmaProxy(proxy).run(parameterObject.isDaemon());
 	}
 
 	public static SimsparkAgentProxyServerParameter parseParameters(String[] args)
@@ -73,6 +73,7 @@ public class MagmaProxy
 		String ssHost = "127.0.0.1";
 		int ssPort = 3100;
 		boolean showMessages = false;
+		boolean daemon = false;
 
 		for (String arg : args) {
 			if (arg.startsWith("--proxyport=")) {
@@ -83,6 +84,8 @@ public class MagmaProxy
 				ssPort = Integer.parseInt(arg.replaceFirst("--serverport=", ""));
 			} else if (arg.startsWith("--verbose")) {
 				showMessages = true;
+			} else if (arg.startsWith("--daemon")) {
+				daemon = true;
 			} else {
 				System.out.println("Unknown Parameter: " + arg);
 				System.out.println("Usage example: --proxyport=3110 --server=127.0.0.1 --serverport=3100");
@@ -90,7 +93,7 @@ public class MagmaProxy
 			}
 		}
 
-		return new SimsparkAgentProxyServerParameter(proxyPort, ssHost, ssPort, showMessages);
+		return new SimsparkAgentProxyServerParameter(proxyPort, ssHost, ssPort, showMessages, daemon);
 	}
 
 	public MagmaProxy(SimsparkAgentProxyServer proxy)
@@ -98,10 +101,17 @@ public class MagmaProxy
 		this.proxy = proxy;
 	}
 
-	public void run()
+	public void run(boolean daemon)
 	{
 		System.out.println("Starting proxy version " + PROXY_VERSION);
 		proxy.start();
+
+		if (daemon) {
+			// Don't try to read from stdin while running in the background
+			// Doing so will result in receiving SIGTTIN
+			// (which will stop the whole process)
+			return;
+		}
 
 		// open up standard input
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));

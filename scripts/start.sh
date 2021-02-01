@@ -1,4 +1,5 @@
-#/*******************************************************************************
+#!/bin/bash
+# ******************************************************************************
 # * Copyright 2008, 2015 Hochschule Offenburg
 # * Klaus Dorer, Stefan Glaser
 # *
@@ -16,12 +17,10 @@
 # *
 # * You should have received a copy of the GNU General Public License
 # * along with it. If not, see <http://www.gnu.org/licenses/>.
-#*******************************************************************************
-#!/bin/bash
-###########################################
+# ******************************************************************************
 # Starts a simulation server proxy
 # example: bash start.sh 127.0.0.1 3100 3110
-###########################################
+# ******************************************************************************
 
 if [ $# -ne 3 ]; then
         echo "Usage: $0 <Simspark server IP> <Simspark server Port> <Proxy server port>"

@@ -1,5 +1,4 @@
 build/
-.clang-format
 *.TMP
 *.java-*
 
