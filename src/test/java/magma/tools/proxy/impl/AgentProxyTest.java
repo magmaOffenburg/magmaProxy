@@ -30,7 +30,7 @@ public class AgentProxyTest
 	private AgentProxy testee;
 
 	@Before
-	public void setUp() throws Exception
+	public void setUp()
 	{
 		testee = new AgentProxy(null, "localhost", 3100, false);
 	}
