@@ -129,7 +129,7 @@ public class AgentProxy
 		}
 
 		if (success) {
-			System.out.println(toString());
+			System.out.println(this);
 			System.out.println("Closed   agent proxy for " + clientConnection);
 		}
 	}
@@ -200,7 +200,7 @@ public class AgentProxy
 
 	public String toStringVerbose()
 	{
-		return toString() + "\nsent: " + sentMessages + "\nreceived: " + receivedMessages;
+		return this + "\nsent: " + sentMessages + "\nreceived: " + receivedMessages;
 	}
 
 	/**
