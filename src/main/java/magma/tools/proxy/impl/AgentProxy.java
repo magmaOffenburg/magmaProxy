@@ -38,7 +38,7 @@ import java.nio.charset.StandardCharsets;
 public class AgentProxy
 {
 	/** The sync-message string */
-	public static byte[] SYNC_BYTES = "(syn)".getBytes();
+	public static final byte[] SYNC_BYTES = "(syn)".getBytes();
 
 	/**
 	 * The maximum time between receiving a perception and responding a

@@ -140,15 +140,15 @@ public class SimsparkAgentProxyServer extends Thread
 
 	public static class SimsparkAgentProxyServerParameter
 	{
-		private int proxyPort;
+		private final int proxyPort;
 
-		private String ssHost;
+		private final String ssHost;
 
-		private int ssPort;
+		private final int ssPort;
 
-		private boolean showMessages;
+		private final boolean showMessages;
 
-		private boolean daemon;
+		private final boolean daemon;
 
 		public SimsparkAgentProxyServerParameter(
 				int proxyPort, String ssHost, int ssPort, boolean showMessages, boolean daemon)
