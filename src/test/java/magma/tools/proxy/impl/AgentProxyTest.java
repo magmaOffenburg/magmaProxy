@@ -19,17 +19,17 @@
  *******************************************************************************/
 package magma.tools.proxy.impl;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import magma.tools.proxy.impl.AgentProxy.ClientActionsForwarder;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class AgentProxyTest
 {
 	private AgentProxy testee;
 
-	@Before
+	@BeforeEach
 	public void setUp()
 	{
 		testee = new AgentProxy(null, "localhost", 3100, false);
