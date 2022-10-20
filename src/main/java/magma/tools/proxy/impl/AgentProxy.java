@@ -59,10 +59,10 @@ public class AgentProxy
 	private ClientActionsForwarder clientForwarder;
 
 	/** statistics of messages sent to server */
-	private MessageInfo sentMessages;
+	private final MessageInfo sentMessages;
 
 	/** statistics of messages received from server */
-	private MessageInfo receivedMessages;
+	private final MessageInfo receivedMessages;
 
 	/** number of sent messages when receiving a message */
 	private int sentMessagesWhenReceiving;
@@ -400,7 +400,7 @@ public class AgentProxy
 
 		private long maxMessageDelta;
 
-		private boolean maxTimeInfoOk;
+		private final boolean maxTimeInfoOk;
 
 		public MessageInfo(boolean maxTimeInfoOk)
 		{

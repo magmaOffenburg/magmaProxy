@@ -35,7 +35,7 @@ public class MagmaProxy
 {
 	private static final String PROXY_VERSION = "2.1.4";
 
-	private SimsparkAgentProxyServer proxy;
+	private final SimsparkAgentProxyServer proxy;
 
 	/**
 	 * Instantiates and starts the Simspark agent proxy.

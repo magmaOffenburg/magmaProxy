@@ -40,16 +40,16 @@ public class SimsparkAgentProxyServer extends Thread
 	private ServerSocket proxySocket;
 
 	/** The proxy server port */
-	private int proxyPort;
+	private final int proxyPort;
 
 	/** Simspark server IP */
-	protected String ssHost;
+	protected final String ssHost;
 
 	/** Simspark server port */
-	protected int ssPort;
+	protected final int ssPort;
 
 	/** List of agent proxies */
-	protected ArrayList<AgentProxy> agentProxies;
+	protected final ArrayList<AgentProxy> agentProxies;
 
 	/** true if messages should be printed from start */
 	protected boolean showMessages;
