@@ -5,7 +5,7 @@
    <groupId>magmaoffenburg</groupId>
    <artifactId>magmaproxy</artifactId>
    <packaging>jar</packaging>
-   <version>2.1.4</version>
+   <version>2.2.0</version>
    <name>magmaProxy</name>
    <url>https://github.com/magmaOffenburg/magmaProxy</url>
 
