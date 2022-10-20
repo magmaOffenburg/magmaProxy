@@ -27,13 +27,13 @@ import java.nio.charset.StandardCharsets;
  * This Class represents a proxy implementation for one client agent. One agent
  * proxy consists of two threads, one for forwarding agent actions and one for
  * forwarding server messages and maintaining sync time.
- *
- * @author Stefan Glaser, Klaus Dorer
- */
-/**
+ * <p>
+ * New since 2015:
  * introduced the checking of say messages. This one version doesn't let chars
  * out of the wiki specified range pass through the server. Quotation marks are
  * being censored too.
+ *
+ * @author Stefan Glaser, Klaus Dorer
  */
 public class AgentProxy
 {
