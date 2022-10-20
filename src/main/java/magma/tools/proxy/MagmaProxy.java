@@ -23,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import magma.tools.proxy.impl.AgentProxy;
 import magma.tools.proxy.impl.SimsparkAgentProxyServer;
 import magma.tools.proxy.impl.SimsparkAgentProxyServer.SimsparkAgentProxyServerParameter;
@@ -71,7 +72,13 @@ public class MagmaProxy
 		new MagmaProxy(proxy).run(parameterObject.isDaemon());
 	}
 
-	public static SimsparkAgentProxyServerParameter parseParameters(String[] args)
+	/**
+	 * Parses the given parameters and adds every unknown parameter to unknownParameters.
+	 * @param args the arguments given on the command line
+	 * @param unknownParameters the list to which the unknown parameters are added
+	 * @return the parsed parameters for the agent proxy
+	 */
+	public static SimsparkAgentProxyServerParameter parseParameters(String[] args, List<String> unknownParameters)
 	{
 		int proxyPort = 3110;
 		String ssHost = "127.0.0.1";
@@ -91,13 +98,32 @@ public class MagmaProxy
 			} else if (arg.startsWith("--daemon")) {
 				daemon = true;
 			} else {
-				System.out.println("Unknown Parameter: " + arg);
-				System.out.println("Usage example: --proxyport=3110 --server=127.0.0.1 --serverport=3100");
-				System.out.println("Use --verbose to display all messages");
+				unknownParameters.add(arg);
 			}
 		}
 
 		return new SimsparkAgentProxyServerParameter(proxyPort, ssHost, ssPort, showMessages, daemon);
+	}
+
+	/**
+	 * Parses the given parameters and prints a warning if a parameter is unknown.
+	 * @param args the arguments given on the command line
+	 * @return the parsed parameters for the agent proxy
+	 */
+	public static SimsparkAgentProxyServerParameter parseParameters(String[] args)
+	{
+		List<String> unknownParameters = new ArrayList<>();
+		SimsparkAgentProxyServerParameter parameters = parseParameters(args, unknownParameters);
+
+		for (String arg : unknownParameters) {
+			System.out.println("Unknown Parameter: " + arg);
+		}
+		if (!unknownParameters.isEmpty()) {
+			System.out.println("Usage example: --proxyport=3110 --server=127.0.0.1 --serverport=3100");
+			System.out.println("Use --verbose to display all messages");
+		}
+
+		return parameters;
 	}
 
 	public MagmaProxy(SimsparkAgentProxyServer proxy)
