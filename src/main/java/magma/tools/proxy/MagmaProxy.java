@@ -69,7 +69,7 @@ public class MagmaProxy
 	{
 		SimsparkAgentProxyServerParameter parameterObject = parseParameters(args);
 		SimsparkAgentProxyServer proxy = new SimsparkAgentProxyServer(parameterObject);
-		new MagmaProxy(proxy).run(parameterObject.isDaemon());
+		new MagmaProxy(proxy).run(parameterObject.daemon());
 	}
 
 	/**

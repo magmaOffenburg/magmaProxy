@@ -56,10 +56,10 @@ public class SimsparkAgentProxyServer extends Thread
 
 	public SimsparkAgentProxyServer(SimsparkAgentProxyServerParameter parameterObject)
 	{
-		this.proxyPort = parameterObject.getProxyPort();
-		this.ssHost = parameterObject.getSsHost();
-		this.ssPort = parameterObject.getSsPort();
-		this.showMessages = parameterObject.isShowMessages();
+		this.proxyPort = parameterObject.proxyPort();
+		this.ssHost = parameterObject.ssHost();
+		this.ssPort = parameterObject.ssPort();
+		this.showMessages = parameterObject.showMessages();
 
 		agentProxies = new ArrayList<>();
 	}
@@ -138,51 +138,8 @@ public class SimsparkAgentProxyServer extends Thread
 		return agentProxies;
 	}
 
-	public static class SimsparkAgentProxyServerParameter
+	public record SimsparkAgentProxyServerParameter(
+			int proxyPort, String ssHost, int ssPort, boolean showMessages, boolean daemon)
 	{
-		private final int proxyPort;
-
-		private final String ssHost;
-
-		private final int ssPort;
-
-		private final boolean showMessages;
-
-		private final boolean daemon;
-
-		public SimsparkAgentProxyServerParameter(
-				int proxyPort, String ssHost, int ssPort, boolean showMessages, boolean daemon)
-		{
-			this.proxyPort = proxyPort;
-			this.ssHost = ssHost;
-			this.ssPort = ssPort;
-			this.showMessages = showMessages;
-			this.daemon = daemon;
-		}
-
-		public int getProxyPort()
-		{
-			return proxyPort;
-		}
-
-		public String getSsHost()
-		{
-			return ssHost;
-		}
-
-		public int getSsPort()
-		{
-			return ssPort;
-		}
-
-		public boolean isShowMessages()
-		{
-			return showMessages;
-		}
-
-		public boolean isDaemon()
-		{
-			return daemon;
-		}
 	}
 }
