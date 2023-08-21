@@ -7,7 +7,7 @@ Proxy for the [RoboCup 3D Soccer Simulation League](http://wiki.robocup.org/wiki
 The Simspark Agent Proxy is a proxy for client agents, connecting to the
 Simspark server. Its main purpose is to ensure independence of network
 issues/delays, by monitoring think cycle times of agents on the client machine.
-The proxy is developed using Java 1.8.
+The proxy is developed using Java 17.
 
 ![Runtime architecture](screenshots/magmaProxy.png)
 
