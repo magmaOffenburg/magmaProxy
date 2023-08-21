@@ -28,7 +28,7 @@ The proxy is developed using Java 17.
 - Make sure you have [simspark and rcsserver3d](https://gitlab.com/robocup-sim/SimSpark/-/wikis/home) installed and the command `rcssserver3d` is available on your command line.
 
 ### Getting the prebuilt bersion
-We provide a prebuilt version of magmaProxy. You can download the latest version from the [Releases page](https://github.com/magmaOffenburg/magmaProxy/releases) (e.g. `magmaproxy-2.2.0.zip`). The Zip file contains the JAR file as well as the start script.
+We provide a prebuilt version of magmaProxy. You can download the latest version from the [Releases page](https://github.com/magmaOffenburg/magmaProxy/releases) (e.g. `magmaproxy-3.0.0.zip`). The Zip file contains the JAR file as well as the start script.
 
 ### Building from source
 - Clone the repository: `git clone https://github.com/magmaOffenburg/magmaProxy.git`.

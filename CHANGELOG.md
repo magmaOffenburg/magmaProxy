@@ -1,3 +1,7 @@
+3.0.0 (August 21, 2023)
+------------------------------
+* Update minimum required Java version to 17
+
 2.2.0 (October 20, 2022)
 ------------------------------
 * Update minimum required Java version to 1.8
